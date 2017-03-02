@@ -1,0 +1,44 @@
+# Copyright Denise van den Berg - Maes 2017
+
+# Loading modules
+import sys, pygame, time, random, os
+from pygame.locals import *
+from builtins import print
+os.environ['SDL_VIDEO_CENTERED'] = '1'
+pygame.init()
+
+# Screen information
+FPS = 60 
+fpsClock = pygame.time.Clock()
+display_width = 1500
+display_height = 750
+
+gameDisplay = pygame.display.set_mode((display_width,display_height))
+pygame.display.set_caption('Upseiling')
+clock = pygame.time.Clock()
+
+# RGB Colours
+black = (0,0,0)
+
+def game_intro():
+
+    intro = True
+
+    while intro:
+        for event in pygame.event.get():
+            print(event)
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+                
+        gameDisplay.fill(white)
+        pygame.display.update()
+        clock.tick(15)
+
+def terminate():
+    pygame.quit()
+    quit()
+
+game_intro()
+pygame.quit()
+quit()
