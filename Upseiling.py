@@ -28,8 +28,8 @@ class Game:
         self.Exit = False
         self.Level = "menu"
             
-    def Draw(self): 
-        self.Display.blit(pygame.image.load(), [0, 0])
+    def Draw(self, image_destination): 
+        self.Display.blit(pygame.image.load(image_destination), [0, 0])
 
     def Update(self): 
         pygame.display.update()
@@ -41,9 +41,6 @@ class Game:
                 for event in pygame.event.get(): 
                     if event.type == pygame.QUIT: 
                         self.Exit = True 
-                    if event.type == pygame.KEYDOWN:
-                        if event.key == pygame.K_ESCAPE:
-                            self.Exit = True
                 self.Draw("background_game_menu.jpg")
                 self.Tick() # refreshes the window. this is the end of the loop
             # you can use elifs here to make new levels
@@ -61,11 +58,7 @@ class Button:
     def draw():
         self.Display.blit(pygame.image.load(), [0, 0])
     def click():
-        for event in pygame.event.get():
-            if event.type == pygame.mouse.get_pressed():
-                pos = pygame.mouse.get_pos()
-                if self.collidepoint(pos):
-                    return
+        # fix dit zelf, Denise
 
 class Square:
     def __init__(self, color, posx, posy):
@@ -98,27 +91,29 @@ class Player:
     def __init__(self):
         self.Square = 0
         self.image = image
-    def SetPosition(self):
-        self.Square = self.Square + Dice.Roll
+    def SetPosition(self, number):
+        self.Square = self.Square + number
 
 class Dice:
     def __init__(self, x, y, player):
         self.X = x
         self.Y = y
         self.Player = player
-        self.Image = image
+        self.Image = "dice1.png"
+        self.Number = random.randint(1,6)
     
     def Roll(self):
         self.Number = random.randint(1,6)
+        # getting the 'code' for the eyes that have to be drawn
+        if   self.Number == 1: self.Image = pygame.image.load("dice1.png")
+        elif self.Number == 2: self.Image = pygame.image.load("dice2.png")
+        elif self.Number == 3: self.Image = pygame.image.load("dice3.png")
+        elif self.Number == 4: self.Image = pygame.image.load("dice4.png")
+        elif self.Number == 5: self.Image = pygame.image.load("dice4.png")
+        elif self.Number == 6: self.Image = pygame.image.load("dice5.png")
     
     def Draw(self):
-        # getting the 'code' for the eyes that have to be drawn
-        if   self.Number == 1: self.Image = pygame.image.load(("dice1.png"), [270, 210])
-        elif self.Number == 2: self.Image = pygame.image.load(("dice2.png"), [270, 210])
-        elif self.Number == 3: self.Image = pygame.image.load(("dice3.png"), [270, 210])
-        elif self.Number == 4: self.Image = pygame.image.load(("dice4.png"), [270, 210])
-        elif self.Number == 5: self.Image = pygame.image.load(("dice4.png"), [270, 210])
-        elif self.Number == 6: self.Image = pygame.image.load(("dice5.png"), [270, 210])
+        game.Display.blit(self.Image, [self.X, self.Y])
 
 
 game = Game()
