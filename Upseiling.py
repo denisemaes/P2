@@ -67,7 +67,7 @@ class Game:
             else: self.Exit = True 
 
 class Button:
-    def __init__(self, x, y, w, h, image, constant, pressed, pressing, action):
+    def __init__(self, x, y, w, h, image, constant, action):
         self.x = x
         self.y = y
         self.w = w
@@ -79,10 +79,15 @@ class Button:
         self.action = action
 
     def rollover(self):
-        if x + w > [0] > x and y + h > [1] > y:
-            self.Load = pygame.image.load(image)
+        if x + w > [0] > x and y + h > [1] > y: # [0]? [1]? wtf denise. Dit kan nooit.
+            self.Load = pygame.image.load(image) # self. dingen worden gemaakt in de init. Je kan ze niet gebruiken als je ze niet eerst aanmaakt in de __init__
+            # pygame.image.load wordt nu iedere keer uitgevoert als rollover uitgevoert wordt, waardoor het probleem van lag nogsteeds niet opgelost is.
+            # self.Image is toch al de image? waarom laad je het daar niet? (self.image = pygame.image.load(image)
+            # BTW nog een fout. de variabele image bestaat niet in de method. ik neem aan dat je self.image bedoelt.
             game.Display.blit(self.Load, (0,0))
             game.Update
+            # game.update? waarom? 
+    # waar is de draw functie? je moet toch de button tekenen? (je kan het zien als een soort update functie voor de class. deze wordt iedere frame uitgevoert).
 
 class Square:
     def __init__(self, color, posx, posy):
@@ -131,12 +136,16 @@ class Dice:
     
     def Draw(self):
         # getting the 'code' for the eyes that have to be drawn
-        if   self.Number == 1: self.Image = pygame.image.load(("dice1.png"), [270, 210])
+        if   self.Number == 1: self.Image = pygame.image.load(("dice1.png"), [270, 210]) # pygame.image.load is een foto laden. waarom die coordinaten??
         elif self.Number == 2: self.Image = pygame.image.load(("dice2.png"), [270, 210])
         elif self.Number == 3: self.Image = pygame.image.load(("dice3.png"), [270, 210])
         elif self.Number == 4: self.Image = pygame.image.load(("dice4.png"), [270, 210])
         elif self.Number == 5: self.Image = pygame.image.load(("dice4.png"), [270, 210])
         elif self.Number == 6: self.Image = pygame.image.load(("dice5.png"), [270, 210])
+        # waarom heb je dit weer in de draw gedaan? nu krijg je alweer hetelfde probleem met de lag. iedere frame wordt een foto geladen.
+        # als het goed is veanderd de dice niet van nummer iedere frame maar iedere keer dat er gegooit wordt toch..?
+        
+        # dit moet wel in de draw. dit tekent het uiteindelijke geladen fotootje.
         game.Display.blit(self.Image, [self.X, self.Y])
 # ------------------------------------------------------------------ FUNCTIONS ------------------------------------------------------------#
 
@@ -201,6 +210,8 @@ def text(message):
 
         pygame.display.update()
 
+        # de pygame.display.update() hierboven. die hoort pas iedere frame uitgevoert te worden.
+ 
 def terminate():
     pygame.quit()
     quit()
@@ -208,6 +219,7 @@ def terminate():
 # ------------------------------------------------------------------ RUNNING ------------------------------------------------------------#
 
 game = Game()
-startbutton = Button(40, 325, 235, 120, "background_game_menu_button1.png", constant, pressed, pressing, action)
+startbutton = Button(40, 325, 235, 120, "background_game_menu_button1.png", False, action)
+# action is nog geen functie, maar dit wist je vast al :).
 game.Loop()
 terminate()
