@@ -79,10 +79,9 @@ class Button:
         self.action = action
 
     def rollover(self):
-        if x + w > [0] > x and y + h > [1] > y:
+        if self.x + self.0 > pygame.mouse.get_pos()[0] > self.x and self.y + self.h > pygame.mouse.get_pos()[1] > self.y:
             self.Load = pygame.image.load(image)
             game.Display.blit(self.Load, (0,0))
-            game.Update
 
 class Square:
     def __init__(self, color, posx, posy):
