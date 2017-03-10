@@ -86,7 +86,7 @@ class Button:
             # BTW nog een fout. de variabele image bestaat niet in de method. ik neem aan dat je self.image bedoelt.
             game.Display.blit(self.Load, (0,0))
             game.Update
-            # game.update? waarom? je voert de functie ook niet eens uit. daar heb je de () voor nodig.
+            # game.update? waarom? 
     # waar is de draw functie? je moet toch de button tekenen? (je kan het zien als een soort update functie voor de class. deze wordt iedere frame uitgevoert).
 
 class Square:
@@ -136,7 +136,7 @@ class Dice:
     
     def Draw(self):
         # getting the 'code' for the eyes that have to be drawn
-        if   self.Number == 1: self.Image = pygame.image.load(("dice1.png"), [270, 210]) # DENISE. pygame.image.load is een foto laden. waarom die coordinaten??
+        if   self.Number == 1: self.Image = pygame.image.load(("dice1.png"), [270, 210]) # pygame.image.load is een foto laden. waarom die coordinaten??
         elif self.Number == 2: self.Image = pygame.image.load(("dice2.png"), [270, 210])
         elif self.Number == 3: self.Image = pygame.image.load(("dice3.png"), [270, 210])
         elif self.Number == 4: self.Image = pygame.image.load(("dice4.png"), [270, 210])
@@ -210,14 +210,8 @@ def text(message):
 
         pygame.display.update()
 
-        # Laten we maar niet dingen van internet halen denise. dit zorgt voor zo veel problemen in je program.
-        # onder andere, de pygame.display.update() hierboven. die hoort pas iedere frame uitgevoert te worden.
-        # zo zijn er genoeg fouten in die kutfuncties van internet. zoek die dingen zelf uit.
-        # en niet zeggen dat je tijdtekort hebt want als je niet oefent met programmeren ga je ook nooit de rest van het spel kunnen maken
-        # en geloof me niet alles staat op intenet wat past bij jouw context.
-        
-        # Leer van problemen oplossen en gebruik niet iemand anders zn code. Je verliest hierdoor controloe over je code en weet je niet meer wat wat precies doet.
-
+        # de pygame.display.update() hierboven. die hoort pas iedere frame uitgevoert te worden.
+ 
 def terminate():
     pygame.quit()
     quit()
