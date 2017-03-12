@@ -31,6 +31,7 @@ class Game:
     def Draw(self, image_destination): 
         self.Load = pygame.image.load(image_destination)
         self.Display.blit(self.Load, (0,0))
+        # hier wordt.... nogsteeds... de image iedere frame geladen.
 
     def Update(self): 
         pygame.display.update()
@@ -43,6 +44,9 @@ class Game:
                     if event.type == pygame.QUIT: 
                         self.terminate = True 
                 self.Draw("background_game_menu.jpg")
+
+                startbutton.draw()
+
                 self.Update() 
             else: self.Exit = True 
 
@@ -61,9 +65,13 @@ class Button:
     def rollover(self):
         if self.x + self.w > pygame.mouse.get_pos()[0] > self.x and self.y + self.h >  pygame.mouse.get_pos()[1] > self.y:
             self.draw()
+            # it is een verkeerde manier van programmeren. aangezien de draw functie iedere keer uitgevoert wordt, en niet rollover.
+            # stel je voert rollover uit in de draw functie, dan zou er infinite recursion komen als de if in rollover true is.
+
 
     def draw(self):
-            game.Display.blit(self.image, [self.x, self.y])
+        # op dit moment wordt de knop altijd getekent. zorg ervoor dat er getekent wordt als de muis er overheen gaat.
+        game.Display.blit(self.image, [0, 0]) # positie [0, 0], want kijk naar de images die je gebruikt. de button is niet rechtsbovenin getekent.
 
 
 class Square:
@@ -109,6 +117,7 @@ def terminate():
 # ------------------------------------------------------------------ RUNNING ------------------------------------------------------------#
 
 game = Game()
-startbutton = Button(40, 325, 235, 120, "background_game_menu_button1.png", False, game.Loop())
+startbutton = Button(40, 325, 235, 120, "background_game_menu_button1.png", False, terminate)
+# je gebruikte zojuist de game.Loop() functie in een instantiering van de button..? Kan je uitleggen waarom?
 game.Loop()
 terminate()
