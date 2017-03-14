@@ -184,10 +184,19 @@ class Tower:
 
 class Player:
     def __init__(self):
-        self.Square = 0
-        self.Image = image
-    def SetPosition(self, number):
-        self.Square = self.Square + number
+        self.Square     = 0
+        self.Images     =[\
+                        pygame.image.load("playerred.png"),\
+                        pygame.image.load("playeryellow.png"),\
+                        pygame.image.load("playergreen.png"),\
+                        pygame.image.load("playerblue.png")]
+
+    def SetPosition(self, dice.Roll):
+        Square()     = Square() + dice.Roll()
+
+    def Draw(self, image_number): 
+        self.Display.blit(self.Images[image_number], (Square()))
+
 # ------------------------------------------------------------------ FUNCTIONS ------------------------------------------------------------#
 
 def startgame():
@@ -235,5 +244,9 @@ quitbutton          = Button(1380,  590,    100,    50,     "background_game_men
 quitbutton2         = Button(1380,  670,    100,    50,     "background_emp2_button8.png",      False, Terminate) 
 menubutton          = Button(20,    670,    100,    50,     "background_emp2_button9.png",      False, startmenu) 
 dice                = Dice()
+player1             = Player(0,0) #geen coords maar 1e cijfer = square[] en 2e = image[], doe ik dat zo goed?
+player2             = Player(0,1)
+player3             = Player(0,2)
+player4             = Player(0,3)
 game.Loop()
 Terminate()
