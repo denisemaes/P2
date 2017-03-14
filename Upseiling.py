@@ -27,24 +27,60 @@ class Game:
         self.Display = pygame.display.set_mode((self.Width, self.Height))
         self.Terminate = False
         self.Level = "menu"
+        self.Images = [pygame.image.load("background_game_menu.jpg"), pygame.image.load("background_empty.jpg"), pygame.image.load("background_emp2.jpg"), pygame.image.load("background_game_board.jpg"), pygame.image.load("background_winscreen.jpg")]
+        #oproepen self.images[0]
             
-    def Draw(self, image_destination): 
-        self.Load = pygame.image.load(image_destination)
-        self.Display.blit(self.Load, (0,0))
-        #fix dit, niet elke keer laden  >> Geen idee hoe?
+    def Draw(self, image_number): 
+        self.Display.blit(self.Images[image_number], (0,0))
+
 
     def Update(self): 
         pygame.display.update()
         self.Clock.tick(self.FPS)
 
-    def Loop(self): 
+    def Loop(self): #Kan dit ook mooier met een array? of is dat niet mogelijk?
         while not self.Terminate:
             if self.Level == "menu": 
                 for event in pygame.event.get(): 
                     if event.type == pygame.QUIT: 
                         self.Terminate = True 
-                self.Draw("background_game_menu.jpg")
-                startbutton.Draw() ##Start button niet defined??????
+                self.Draw(0)
+                startbutton.Draw() 
+                self.Update() 
+            if self.Level == "tutorial": 
+                for event in pygame.event.get(): 
+                    if event.type == pygame.QUIT: 
+                        self.Terminate = True 
+                self.Draw(0)
+                tutorialbutton.Draw() 
+                self.Update() 
+            if self.Level == "settings": 
+                for event in pygame.event.get(): 
+                    if event.type == pygame.QUIT: 
+                        self.Terminate = True 
+                self.Draw(0)
+                settingsbutton.Draw() 
+                self.Update() 
+            if self.Level == "highscores": 
+                for event in pygame.event.get(): 
+                    if event.type == pygame.QUIT: 
+                        self.Terminate = True 
+                self.Draw(0)
+                highscoresbutton.Draw() 
+                self.Update() 
+            if self.Level == "instructions": 
+                for event in pygame.event.get(): 
+                    if event.type == pygame.QUIT: 
+                        self.Terminate = True 
+                self.Draw(0)
+                instructionsbutton.Draw() 
+                self.Update() 
+            if self.Level == "rules": 
+                for event in pygame.event.get(): 
+                    if event.type == pygame.QUIT: 
+                        self.Terminate = True 
+                self.Draw(0)
+                rulesbutton.Draw() 
                 self.Update() 
             else: self.Terminate = True 
 
@@ -61,17 +97,13 @@ class Button:
         self.Action = action
 
     def Draw(self):
-        # op dit moment wordt de knop altijd getekent. zorg ervoor dat er getekent wordt als de muis er overheen gaat. >> Geen idee hoe.
-        game.Display.blit(self.image, [0, 0]) # positie [0, 0], want kijk naar de images die je gebruikt. de button is niet rechtsbovenin getekent.   << Got it. Maar als dat wel het geval zou zijn dan wel zoals eerst?
+        self.Rollover()
 
     def Rollover(self):
         if self.X + self.W > pygame.mouse.get_pos()[0] > self.X and self.Y + self.H >  pygame.mouse.get_pos()[1] > self.Y:
-            self.Draw() 
-            # dit is een verkeerde manier van programmeren. aangezien de draw functie iedere keer uitgevoert wordt, en niet rollover.   >>> Waarom is dat fout?
-            # stel je voert rollover uit in de draw functie, dan zou er infinite recursion komen als de if in rollover true is.   >>>> Is dat een slecht iets of een goed iets?? 
-
-
-
+            game.Display.blit(self.Image, [0, 0])
+            if pygame.mouse.get_pressed()[0] == True:
+                self.Action()
 
 class Square:
     def __init__(self, color, posx, posy):
@@ -108,6 +140,26 @@ class Player:
         self.Square = self.Square + number
 # ------------------------------------------------------------------ FUNCTIONS ------------------------------------------------------------#
 
+def startgame():
+    game.Level = "game"
+
+def starttutorial():
+    game.Level = "tutorial"
+
+def startsettings():
+    game.Level = "settings"
+
+def starthighscores():
+    game.Level = "highscores"
+
+def startinstructions():
+    game.Level = "instructions"
+
+def startrules():
+    game.Level = "rules"
+
+def startmenu():
+    game.Level = "menu"
 
 def Terminate():
     pygame.quit()
@@ -115,7 +167,15 @@ def Terminate():
 
 # ------------------------------------------------------------------ RUNNING ------------------------------------------------------------#
 
-game = Game()
+game                = Game()
+startbutton         = Button(40, 325, 235, 120, "background_game_menu_button1.png", False, startgame) 
+tutorialbutton      = Button(40, 325, 235, 120, "background_game_menu_button2.png", False, starttutorial) 
+settingsbutton      = Button(40, 325, 235, 120, "background_game_menu_button3.png", False, startsettings) 
+highscoresbutton    = Button(40, 325, 235, 120, "background_game_menu_button4.png", False, starthighscores) 
+instructionsbutton  = Button(40, 325, 235, 120, "background_game_menu_button5.png", False, startinstructions) 
+rulesbutton         = Button(40, 325, 235, 120, "background_game_menu_button6.png", False, startrules) 
+quitbutton          = Button(40, 325, 235, 120, "background_game_menu_button7.png", False, Terminate) 
+quitbutton2         = Button(40, 325, 235, 120, "background_emp2_button8.png", False, Terminate) 
+menubutton          = Button(40, 325, 235, 120, "background_emp2_button9.png", False, startmenu) 
 game.Loop()
-startbutton = Button(40, 325, 235, 120, "background_game_menu_button1.png", False, game.Level == 'exit') #Dit was om puur iets erin te hebben, is dit beter? Zodat die straks naar ander level kan?
 Terminate()
