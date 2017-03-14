@@ -27,80 +27,78 @@ class Game:
         self.Display    = pygame.display.set_mode((self.Width, self.Height))
         self.Terminate  = False
         self.Level      = "menu"
-        self.Images     = [pygame.image.load("background_game_menu.jpg"), pygame.image.load("background_empty.jpg"), pygame.image.load("background_emp2.jpg"), pygame.image.load("background_game_board.jpg"), pygame.image.load("background_winscreen.jpg")]
-        #oproepen self.images[0]
+        self.Images     = [\
+                        pygame.image.load("background_game_menu.jpg"),\
+                        pygame.image.load("background_empty.jpg"),\
+                        pygame.image.load("background_emp2.jpg"),\
+                        pygame.image.load("background_game_board.jpg"),\
+                        pygame.image.load("background_winscreen.jpg"),\
+                        pygame.image.load("background_emp2_instr.jpg"),\
+                        pygame.image.load("background_emp2_rules.jpg")]
+                        #oproepen self.Images[0]
             
 
     def Draw(self, image_number): 
         self.Display.blit(self.Images[image_number], (0,0))
 
+    def DrawObjects(self, *list_of_objects):
+       for obj in list_of_objects:
+            obj.Draw()
 
     def Update(self): 
         pygame.display.update()
         self.Clock.tick(self.FPS)
 
-    def Loop(self): #Kan dit ook mooier met een array? of is dat niet mogelijk?
+    def Loop(self): 
         while not self.Terminate:
             if self.Level == "menu": 
                 for event in pygame.event.get(): 
                     if event.type == pygame.QUIT: 
                         self.Terminate = True 
                 self.Draw(0)
-                startbutton.Draw() 
-                tutorialbutton.Draw()
-                settingsbutton.Draw()
-                highscoresbutton.Draw()
-                instructionsbutton.Draw()
-                rulesbutton.Draw()
-                quitbutton.Draw()
+                self.DrawObjects(startbutton, tutorialbutton, settingsbutton, highscoresbutton, instructionsbutton, rulesbutton, quitbutton)
                 self.Update() 
             elif self.Level == "tutorial": 
                 for event in pygame.event.get(): 
                     if event.type == pygame.QUIT: 
                         self.Terminate = True 
                 self.Draw(2)
-                quitbutton2.Draw()
-                menubutton.Draw()
+                self.DrawObjects(quitbutton2, menubutton)
                 self.Update() 
             elif self.Level == "settings": 
                 for event in pygame.event.get(): 
                     if event.type == pygame.QUIT: 
                         self.Terminate = True 
                 self.Draw(2)
-                quitbutton2.Draw()
-                menubutton.Draw()
+                self.DrawObjects(quitbutton2, menubutton)
                 self.Update() 
             elif self.Level == "highscores": 
                 for event in pygame.event.get(): 
                     if event.type == pygame.QUIT: 
                         self.Terminate = True 
                 self.Draw(2)
-                quitbutton2.Draw()
-                menubutton.Draw()
+                self.DrawObjects(quitbutton2, menubutton)
                 self.Update() 
             elif self.Level == "instructions": 
                 for event in pygame.event.get(): 
                     if event.type == pygame.QUIT: 
                         self.Terminate = True 
-                self.Draw(2)
-                quitbutton2.Draw()
-                menubutton.Draw()
+                self.Draw(5)
+                self.DrawObjects(quitbutton2, menubutton)
                 self.Update() 
             elif self.Level == "rules": 
                 for event in pygame.event.get(): 
                     if event.type == pygame.QUIT: 
                         self.Terminate = True 
-                self.Draw(2)
-                quitbutton2.Draw()
-                menubutton.Draw()
+                self.Draw(6)
+                self.DrawObjects(quitbutton2, menubutton)
                 self.Update() 
             elif self.Level == "game": 
                 for event in pygame.event.get(): 
                     if event.type == pygame.QUIT: 
                         self.Terminate = True 
                 self.Draw(3)
-                quitbutton2.Draw()
-                menubutton.Draw()
+                self.DrawObjects(quitbutton2, menubutton, dice)
                 self.Update() 
             else: self.Terminate = True 
 
@@ -124,6 +122,38 @@ class Button:
             game.Display.blit(self.Image, [0, 0])
             if pygame.mouse.get_pressed()[0] == True:
                 self.Action()
+
+class Dice:
+    def __init__(self):
+        self.Images     =[\
+                        pygame.image.load("dice1.png"),\
+                        pygame.image.load("dice2.png"),\
+                        pygame.image.load("dice3.png"),\
+                        pygame.image.load("dice4.png"),\
+                        pygame.image.load("dice5.png"),\
+                        pygame.image.load("dice6.png"),\
+                        pygame.image.load("diceroll.png")]
+    
+    def Draw(self):
+        self.Rollover()
+
+    def Rollover(self):
+        if self.X + self.W > pygame.mouse.get_pos()[0] > self.X and self.Y + self.H >  pygame.mouse.get_pos()[1] > self.Y:
+            game.Display.blit(self.Images [6, (270, 210)]
+            if pygame.mouse.get_pressed()[0] == True:
+                self.Roll()
+                
+    def Roll(self):
+        self.Number = random.randint(1,6)
+
+    def Draw(self, image_number): 
+        if   self.Number == 1: Display.blit(self.Images[0, (270, 210)])
+        elif self.Number == 2: Display.blit(self.Images[1, (270, 210)])
+        elif self.Number == 3: Display.blit(self.Images[2, (270, 210)])
+        elif self.Number == 4: Display.blit(self.Images[3, (270, 210)])
+        elif self.Number == 5: Display.blit(self.Images[4, (270, 210)])
+        elif self.Number == 6: Display.blit(self.Images[5, (270, 210)])
+        message_display("You rolled: " +str(Roll))
 
 class Square:
     def __init__(self, color, posx, posy):
@@ -181,6 +211,13 @@ def startrules():
 def startmenu():
     game.Level = "menu"
 
+def message_display(text):
+    largeText = pygame.font.Font('freesansbold.ttf',115)
+    TextSurf, TextRect = text_objects(text, largeText)
+    TextRect.center = ((display_width/2),(display_height/2))
+    game.Display.blit(TextSurf, TextRect)
+    game.Display.Update()
+
 def Terminate():
     pygame.quit()
     quit()
@@ -197,5 +234,6 @@ rulesbutton         = Button(170,   500,    150,    90,     "background_game_men
 quitbutton          = Button(1380,  590,    100,    50,     "background_game_menu_button7.png", False, Terminate) 
 quitbutton2         = Button(1380,  670,    100,    50,     "background_emp2_button8.png",      False, Terminate) 
 menubutton          = Button(20,    670,    100,    50,     "background_emp2_button9.png",      False, startmenu) 
+dice                = Dice()
 game.Loop()
 Terminate()
