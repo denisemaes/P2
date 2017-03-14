@@ -38,6 +38,10 @@ class Game:
     def Update(self): 
         pygame.display.update()
         self.Clock.tick(self.FPS)
+    
+    def DrawObjects(self, list_of_objects):
+        for obj in list_of_objects:
+            obj.Draw()
 
     def Loop(self): #Kan dit ook mooier met een array? of is dat niet mogelijk?
         while not self.Terminate:
@@ -46,14 +50,8 @@ class Game:
                     if event.type == pygame.QUIT: 
                         self.Terminate = True 
                 self.Draw(0)
-                startbutton.Draw() 
-                tutorialbutton.Draw()
-                settingsbutton.Draw()
-                highscoresbutton.Draw()
-                instructionsbutton.Draw()
-                rulesbutton.Draw()
-                quitbutton.Draw()
-                self.Update() 
+                self.DrawObjects([startbutton, tutorialbutton, settingsbutton, highscoresbutton, instructionsbutton, rulesbutton, quitbutton])
+                self.Update()  
             elif self.Level == "tutorial": 
                 for event in pygame.event.get(): 
                     if event.type == pygame.QUIT: 
