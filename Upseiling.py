@@ -125,6 +125,8 @@ class Button:
 
 class Dice:
     def __init__(self):
+        # dus de dice heeft alleen fotos. niks anders?
+        # geen xcoordinaat, ycoordinaat, nummer, etc..? je gebruikt ze anders wel in een functie terwijl ze nog niet bestaan?
         self.Images     =[\
                         pygame.image.load("dice1.png"),\
                         pygame.image.load("dice2.png"),\
@@ -138,22 +140,33 @@ class Dice:
         self.Rollover()
 
     def Rollover(self):
+        # je gebruikt variabelen die (nog) niet bestaan.
         if self.X + self.W > pygame.mouse.get_pos()[0] > self.X and self.Y + self.H >  pygame.mouse.get_pos()[1] > self.Y:
-            game.Display.blit(self.Images [6, (270, 210)]
+            game.Display.blit(self.Images[6], (270, 210))
             if pygame.mouse.get_pressed()[0] == True:
                 self.Roll()
                 
     def Roll(self):
+        # je gebruikt variabelen die (nog) niet bestaan.
         self.Number = random.randint(1,6)
+        # dit verandert alleen het nummer van de dice (self.Number).
+        # dit is wat je dus gebruikt als je het cijfertje wilt veranderen en dus ALLEEN voor dat.
+        # niet gebruiken voor een cijfer krijgen zoals je in een player functie probeerde. dit slaat nergens op.
 
     def Draw(self, image_number): 
+        # je gebruikt variabelen die (nog) niet bestaan.
+        # het is game.Display.blit . niet Display.blit .
+        # waarom doe je self.Images[getal, (getal, getal)] ? dit klopt niet.
+        # om een array element te gebruiken doe je self.Images[INTEGER] . de coordinaten horen NIET in de verwijzing naar een element van de array.
         if   self.Number == 1: Display.blit(self.Images[0, (270, 210)])
         elif self.Number == 2: Display.blit(self.Images[1, (270, 210)])
         elif self.Number == 3: Display.blit(self.Images[2, (270, 210)])
         elif self.Number == 4: Display.blit(self.Images[3, (270, 210)])
         elif self.Number == 5: Display.blit(self.Images[4, (270, 210)])
         elif self.Number == 6: Display.blit(self.Images[5, (270, 210)])
-        message_display("You rolled: " +str(Roll))
+
+        # dus je gaat non-stop deze text laten zien? zo ja prima.
+        message_display("You rolled: " + str(Roll)) # Wat is Roll? het bestaat niet.
 
 class Square:
     def __init__(self, color, posx, posy):
@@ -179,20 +192,24 @@ class Tower:
             Square(red,     1262, 175),\
             Square(green,   1265, 130),\
             Square(blue,    1270, 100),\
-            Square(grey,    1280, 60),\
-            Square(win,     1290, 25)]
+            Square(grey,    1280, 60 ),\
+            Square(win,     1290, 25 )]
 
 class Player:
     def __init__(self):
-        self.Square     = 0
-        self.Images     =[\
-                        pygame.image.load("playerred.png"),\
-                        pygame.image.load("playeryellow.png"),\
-                        pygame.image.load("playergreen.png"),\
-                        pygame.image.load("playerblue.png")]
+        self.Square = 0
+        self.Images =[\
+            pygame.image.load("playerred.png"),\
+            pygame.image.load("playeryellow.png"),\
+            pygame.image.load("playergreen.png"),\
+            pygame.image.load("playerblue.png")]
 
+    # stel, dice.Roll gaf daadwerkelijk een cijfer terug (wat het niet doet). dan moet je het niet in de parameters doen van deze functie.
+    # de parameters van de functie zijn locale variabelen voor alleen die functie. stel je noemt een parameter henk, en als je de functie oproept doe je:
+    # player1.SetPosition(dice.Roll) . dan zal (in de functie) henk nu dice.Roll zijn.
+    # maar aangezien je dice.Roll() gewoon kan aanroepen, hoef je het niet op te slaan als extra variabele in de functie, maar kan je het gewoon uitvoeren in de functie.
     def SetPosition(self, dice.Roll):
-        Square()     = Square() + dice.Roll()
+        Square() = Square() + dice.Roll()
 
     def Draw(self, image_number): 
         self.Display.blit(self.Images[image_number], (Square()))
@@ -244,7 +261,29 @@ quitbutton          = Button(1380,  590,    100,    50,     "background_game_men
 quitbutton2         = Button(1380,  670,    100,    50,     "background_emp2_button8.png",      False, Terminate) 
 menubutton          = Button(20,    670,    100,    50,     "background_emp2_button9.png",      False, startmenu) 
 dice                = Dice()
+
 player1             = Player(0,0) #geen coords maar 1e cijfer = square[] en 2e = image[], doe ik dat zo goed?
+
+# De constructor (de functie __init__ die een class uitvoert als je een instantie maakt) van class Player heeft geen parameters.
+# De eerste parameter (op welke square de player begint) is altijd hetzelfde. dus hoeven wij niet aan de constructor te geven als parameter (het is altijd 0).
+# Ik weet wat jij wilt, dus hier een voorbeeld (niet kopiëren plakken want dit is uitleg, geen uitwerking voor jouw probleem):
+
+# class Player:
+#     def __init__(self, welke_kleur_ben_ik):
+#         self.Square = 0
+#         if welke_kleur_ben_ik == "rood" : self.Image = pygame.image.load("playerred.png")
+#         if welke_kleur_ben_ik == "geel" : self.Image = pygame.image.load("playerryellow.png")
+#         if welke_kleur_ben_ik == "groen": self.Image = pygame.image.load("playergreen.png")
+#         if welke_kleur_ben_ik == "blauw": self.Image = pygame.image.load("playerblue.png")
+
+# player1 = Player("rood")
+# player2 = Player("geel")
+# player3 = Player("groen")
+# player4 = Player("blauw")
+
+# Ik hoop dat ik hiermee verduidelijk dat je moet nadenken en niet blindelings dingen kopiëert van een class die eerder gemaakt is.
+        
+
 player2             = Player(0,1)
 player3             = Player(0,2)
 player4             = Player(0,3)
