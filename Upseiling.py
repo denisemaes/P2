@@ -35,15 +35,10 @@ class Game:
                         pygame.image.load("background_winscreen.jpg"),\
                         pygame.image.load("background_emp2_instr.jpg"),\
                         pygame.image.load("background_emp2_rules.jpg")]
-                        #oproepen self.Images[0]
             
 
     def Draw(self, image_number): 
         self.Display.blit(self.Images[image_number], (0,0))
-
-    def DrawObjects(self, *list_of_objects):
-       for obj in list_of_objects:
-            obj.Draw()
 
     def Update(self): 
         pygame.display.update()
@@ -56,49 +51,62 @@ class Game:
                     if event.type == pygame.QUIT: 
                         self.Terminate = True 
                 self.Draw(0)
-                self.DrawObjects(startbutton, tutorialbutton, settingsbutton, highscoresbutton, instructionsbutton, rulesbutton, quitbutton)
+                startbutton.Draw() 
+                tutorialbutton.Draw()
+                settingsbutton.Draw()
+                highscoresbutton.Draw()
+                instructionsbutton.Draw()
+                rulesbutton.Draw()
+                quitbutton.Draw()
                 self.Update() 
             elif self.Level == "tutorial": 
                 for event in pygame.event.get(): 
                     if event.type == pygame.QUIT: 
                         self.Terminate = True 
                 self.Draw(2)
-                self.DrawObjects(quitbutton2, menubutton)
+                quitbutton2.Draw()
+                menubutton.Draw()
                 self.Update() 
             elif self.Level == "settings": 
                 for event in pygame.event.get(): 
                     if event.type == pygame.QUIT: 
                         self.Terminate = True 
                 self.Draw(2)
-                self.DrawObjects(quitbutton2, menubutton)
+                quitbutton2.Draw()
+                menubutton.Draw()
                 self.Update() 
             elif self.Level == "highscores": 
                 for event in pygame.event.get(): 
                     if event.type == pygame.QUIT: 
                         self.Terminate = True 
                 self.Draw(2)
-                self.DrawObjects(quitbutton2, menubutton)
+                quitbutton2.Draw()
+                menubutton.Draw()
                 self.Update() 
             elif self.Level == "instructions": 
                 for event in pygame.event.get(): 
                     if event.type == pygame.QUIT: 
                         self.Terminate = True 
                 self.Draw(5)
-                self.DrawObjects(quitbutton2, menubutton)
+                quitbutton2.Draw()
+                menubutton.Draw()
                 self.Update() 
             elif self.Level == "rules": 
                 for event in pygame.event.get(): 
                     if event.type == pygame.QUIT: 
                         self.Terminate = True 
                 self.Draw(6)
-                self.DrawObjects(quitbutton2, menubutton)
+                quitbutton2.Draw()
+                menubutton.Draw()
                 self.Update() 
             elif self.Level == "game": 
                 for event in pygame.event.get(): 
                     if event.type == pygame.QUIT: 
                         self.Terminate = True 
                 self.Draw(3)
-                self.DrawObjects(quitbutton2, menubutton, dice)
+                quitbutton2.Draw()
+                menubutton.Draw()
+                dice.Draw()
                 self.Update() 
             else: self.Terminate = True 
 
@@ -123,8 +131,17 @@ class Button:
             if pygame.mouse.get_pressed()[0] == True:
                 self.Action()
 
-class Dice:
-    def __init__(self):
+        
+class Dice: 
+    def __init__(self, x, y, h, w, constant):
+        self.X          = x
+        self.Y          = y
+        self.H          = h
+        self.W          = w
+        self.Constant   = constant
+        self.Pressed    = False
+        self.Pressing   = False
+        self.Number     = 0
         self.Images     =[\
                         pygame.image.load("dice1.png"),\
                         pygame.image.load("dice2.png"),\
@@ -133,27 +150,31 @@ class Dice:
                         pygame.image.load("dice5.png"),\
                         pygame.image.load("dice6.png"),\
                         pygame.image.load("diceroll.png")]
-    
+   
     def Draw(self):
         self.Rollover()
 
-    def Rollover(self):
+    def Rollover(self): 
         if self.X + self.W > pygame.mouse.get_pos()[0] > self.X and self.Y + self.H >  pygame.mouse.get_pos()[1] > self.Y:
-            game.Display.blit(self.Images [6, (270, 210)]
+            game.Display.blit(self.Images [6], (270, 210))
             if pygame.mouse.get_pressed()[0] == True:
-                self.Roll()
-                
+                self.Pressed == True
     def Roll(self):
-        self.Number = random.randint(1,6)
+            if self.Pressed == True:
+                self.Number = int(random.randint(1,6))
+            # dit verandert alleen het nummer van de dice (self.Number).
+            # dit is wat je dus gebruikt als je het cijfertje wilt veranderen en dus ALLEEN voor dat.
+            # niet gebruiken voor een cijfer krijgen zoals je in een player functie probeerde. dit slaat nergens op.
+                if   self.Number == 1: game.Display.blit(self.Images[0], (270, 210))
+                elif self.Number == 2: game.Display.blit(self.Images[1], (270, 210))
+                elif self.Number == 3: game.Display.blit(self.Images[2], (270, 210))
+                elif self.Number == 4: game.Display.blit(self.Images[3], (270, 210))
+                elif self.Number == 5: game.Display.blit(self.Images[4], (270, 210))
+                elif self.Number == 6: game.Display.blit(self.Images[5], (270, 210))
+            message_display("You rolled: " +str(self.Number))
+            return self.Number
+        # dus je gaat non-stop deze text laten zien? zo ja prima.             >> Hij laat t op dit moment alleen zien als er gerold word en gaat dan door, gaat dat veranderen?
 
-    def Draw(self, image_number): 
-        if   self.Number == 1: Display.blit(self.Images[0, (270, 210)])
-        elif self.Number == 2: Display.blit(self.Images[1, (270, 210)])
-        elif self.Number == 3: Display.blit(self.Images[2, (270, 210)])
-        elif self.Number == 4: Display.blit(self.Images[3, (270, 210)])
-        elif self.Number == 5: Display.blit(self.Images[4, (270, 210)])
-        elif self.Number == 6: Display.blit(self.Images[5, (270, 210)])
-        message_display("You rolled: " +str(Roll))
 
 class Square:
     def __init__(self, color, posx, posy):
@@ -179,8 +200,32 @@ class Tower:
             Square(red,     1262, 175),\
             Square(green,   1265, 130),\
             Square(blue,    1270, 100),\
-            Square(grey,    1280, 60),\
-            Square(win,     1290, 25)]
+            Square(grey,    1280, 60 ),\
+            Square(win,     1290, 25 )]
+
+class Questions:
+    def __init__(self, color):
+        self.Color = color
+
+        def Category():
+            category = None
+            if player.SetPosition == Square[1] or Square[6] or Square[11]:
+                category = yellow #blit random question and make a check if correct or incorrect, add score
+            if player.SetPosition == Square[2] or Square[7] or Square[12]:
+                category = red 
+            if player.SetPosition == Square[3] or Square[8] or Square[13]:
+                category = green 
+            if player.SetPosition == Square[4] or Square[9] or Square[14]:
+                category = blue 
+            if player.SetPosition == Square[5] or Square[10] or Square[15]:
+                category = grey 
+            if player.SetPosition == Square[16]:
+                player = winner
+
+                #Je 'category' functie is onnodig. Aangezien de squares de kleur zelf al in zich hebbem, je kan gew Tower.Squares[int].Color gebruiken
+                #En.. Met dat positie voor de player zetten..
+                #tower.Squares[int].X en tower.Squares[int].Y heb je nodig om iemand zn positie op de positie van het vak te zetten
+
 
 class Player:
     def __init__(self):
@@ -191,11 +236,22 @@ class Player:
                         pygame.image.load("playergreen.png"),\
                         pygame.image.load("playerblue.png")]
 
-    def SetPosition(self, dice.Roll):
-        Square()     = Square() + dice.Roll()
+    def SetPosition(self):
+        square = square() + dice.Roll()
 
     def Draw(self, image_number): 
         self.Display.blit(self.Images[image_number], (Square()))
+        self.Square = 0
+        self.Images =[\
+            pygame.image.load("playerred.png"),\
+            pygame.image.load("playeryellow.png"),\
+            pygame.image.load("playergreen.png"),\
+            pygame.image.load("playerblue.png")]
+
+    # stel, dice.Roll gaf daadwerkelijk een cijfer terug (wat het niet doet). dan moet je het niet in de parameters doen van deze functie.
+    # de parameters van de functie zijn locale variabelen voor alleen die functie. stel je noemt een parameter henk, en als je de functie oproept doe je:
+    # player1.SetPosition(dice.Roll) . dan zal (in de functie) henk nu dice.Roll zijn.
+    # maar aangezien je dice.Roll() gewoon kan aanroepen, hoef je het niet op te slaan als extra variabele in de functie, maar kan je het gewoon uitvoeren in de functie.
 
 # ------------------------------------------------------------------ FUNCTIONS ------------------------------------------------------------#
 
@@ -220,12 +276,16 @@ def startrules():
 def startmenu():
     game.Level = "menu"
 
+def text_objects(text, font):
+    textSurface = font.render(text, True, Black)
+    return textSurface, textSurface.get_rect()
+
 def message_display(text):
-    largeText = pygame.font.Font('freesansbold.ttf',115)
+    largeText = pygame.font.Font('freesansbold.ttf',25)
     TextSurf, TextRect = text_objects(text, largeText)
-    TextRect.center = ((display_width/2),(display_height/2))
+    TextRect.center = ((game.Width/2),(game.Height/2))
     game.Display.blit(TextSurf, TextRect)
-    game.Display.Update()
+    game.Update()
 
 def Terminate():
     pygame.quit()
@@ -243,10 +303,27 @@ rulesbutton         = Button(170,   500,    150,    90,     "background_game_men
 quitbutton          = Button(1380,  590,    100,    50,     "background_game_menu_button7.png", False, Terminate) 
 quitbutton2         = Button(1380,  670,    100,    50,     "background_emp2_button8.png",      False, Terminate) 
 menubutton          = Button(20,    670,    100,    50,     "background_emp2_button9.png",      False, startmenu) 
-dice                = Dice()
-player1             = Player(0,0) #geen coords maar 1e cijfer = square[] en 2e = image[], doe ik dat zo goed?
-player2             = Player(0,1)
-player3             = Player(0,2)
-player4             = Player(0,3)
+dice                = Dice(270, 210, 116, 116, True)
+square              = Square()
+#geen coords maar 1e cijfer = square[] en 2e = image[], doe ik dat zo goed?
+#De constructor (de functie __init__ die een class uitvoert als je een instantie maakt) van class Player heeft geen parameters.
+# De eerste parameter (op welke square de player begint) is altijd hetzelfde. dus hoeven wij niet aan de constructor te geven als parameter (het is altijd 0).
+# Ik weet wat jij wilt, dus hier een voorbeeld (niet kopiëren plakken want dit is uitleg, geen uitwerking voor jouw probleem):
+
+# class Player:
+#     def __init__(self, welke_kleur_ben_ik):
+#         self.Square = 0
+#         if welke_kleur_ben_ik == "rood" : self.Image = pygame.image.load("playerred.png")
+#         if welke_kleur_ben_ik == "geel" : self.Image = pygame.image.load("playerryellow.png")
+#         if welke_kleur_ben_ik == "groen": self.Image = pygame.image.load("playergreen.png")
+#         if welke_kleur_ben_ik == "blauw": self.Image = pygame.image.load("playerblue.png")
+
+# player1 = Player("rood")
+# player2 = Player("geel")
+# player3 = Player("groen")
+# player4 = Player("blauw")
+
+# Ik hoop dat ik hiermee verduidelijk dat je moet nadenken en niet blindelings dingen kopiëert van een class die eerder gemaakt is.
+
 game.Loop()
 Terminate()
