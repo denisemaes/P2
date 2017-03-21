@@ -107,19 +107,18 @@ class Game:
                 quitbutton2.Draw()
                 menubutton.Draw()
                 dice.Draw()
+                player.Draw()
                 self.Update() 
             else: self.Terminate = True 
 
 class Button:
-    def __init__(self, x, y, w, h, image, constant, action):
+    def __init__(self, x, y, w, h, image, action):
         self.X          = x
         self.Y          = y
         self.W          = w
         self.H          = h
         self.Image      = pygame.image.load(image)
-        self.Constant   = constant
         self.Pressed    = False
-        self.Pressing   = False
         self.Action     = action
 
     def Draw(self):
@@ -129,51 +128,44 @@ class Button:
         if self.X + self.W > pygame.mouse.get_pos()[0] > self.X and self.Y + self.H >  pygame.mouse.get_pos()[1] > self.Y:
             game.Display.blit(self.Image, [0, 0])
             if pygame.mouse.get_pressed()[0] == True:
+                self.Pressed = True
+            elif self.Pressed == True:
                 self.Action()
+                self.Pressed = False
+                
 
         
 class Dice: 
-    def __init__(self, x, y, h, w, constant):
+    def __init__(self, x, y, h, w):
         self.X          = x
         self.Y          = y
         self.H          = h
         self.W          = w
-        self.Constant   = constant
-        self.Pressed    = False
-        self.Pressing   = False
-        self.Number     = 0
+        self.Number     = 6
         self.Images     =[\
+                        pygame.image.load("diceroll.png"),\
                         pygame.image.load("dice1.png"),\
                         pygame.image.load("dice2.png"),\
                         pygame.image.load("dice3.png"),\
                         pygame.image.load("dice4.png"),\
                         pygame.image.load("dice5.png"),\
-                        pygame.image.load("dice6.png"),\
-                        pygame.image.load("diceroll.png")]
+                        pygame.image.load("dice6.png")]
    
     def Draw(self):
         self.Rollover()
+        game.Display.blit(self.Images[self.Number], (self.X, self.Y))
+
 
     def Rollover(self): 
         if self.X + self.W > pygame.mouse.get_pos()[0] > self.X and self.Y + self.H >  pygame.mouse.get_pos()[1] > self.Y:
-            game.Display.blit(self.Images [6], (270, 210))
+            game.Display.blit(self.Images [0], (self.X, self.Y))
             if pygame.mouse.get_pressed()[0] == True:
-                self.Pressed == True
+                self.Roll()
+
     def Roll(self):
-            if self.Pressed == True:
-                self.Number = int(random.randint(1,6))
-            # dit verandert alleen het nummer van de dice (self.Number).
-            # dit is wat je dus gebruikt als je het cijfertje wilt veranderen en dus ALLEEN voor dat.
-            # niet gebruiken voor een cijfer krijgen zoals je in een player functie probeerde. dit slaat nergens op.
-                if   self.Number == 1: game.Display.blit(self.Images[0], (270, 210))
-                elif self.Number == 2: game.Display.blit(self.Images[1], (270, 210))
-                elif self.Number == 3: game.Display.blit(self.Images[2], (270, 210))
-                elif self.Number == 4: game.Display.blit(self.Images[3], (270, 210))
-                elif self.Number == 5: game.Display.blit(self.Images[4], (270, 210))
-                elif self.Number == 6: game.Display.blit(self.Images[5], (270, 210))
-            message_display("You rolled: " +str(self.Number))
-            return self.Number
-        # dus je gaat non-stop deze text laten zien? zo ja prima.             >> Hij laat t op dit moment alleen zien als er gerold word en gaat dan door, gaat dat veranderen?
+        self.Number = int(random.randint(1,6))
+
+      
 
 
 class Square:
@@ -182,26 +174,29 @@ class Square:
         self.X      = posx
         self.Y      = posy
 
+    def GetPosition(self):
+        return [self.X, self.Y]
+
 class Tower:
     def __init__(self):
-        self.Square = [\
-            Square(start,   1260, 725),\
-            Square(yellow,  1260, 700),\
-            Square(red,     1260, 680),\
-            Square(green,   1260, 660),\
-            Square(blue,    1260, 635),\
-            Square(grey,    1260, 605),\
-            Square(yellow,  1260, 560),\
-            Square(red,     1260, 500),\
-            Square(green,   1260, 450),\
-            Square(blue,    1260, 390),\
-            Square(grey,    1260, 230),\
-            Square(yellow,  1260, 220),\
-            Square(red,     1262, 175),\
-            Square(green,   1265, 130),\
-            Square(blue,    1270, 100),\
-            Square(grey,    1280, 60 ),\
-            Square(win,     1290, 25 )]
+        self.Squares = [\
+            Square("start",   1260, 725),\
+            Square("yellow",  1260, 700),\
+            Square("red",     1260, 680),\
+            Square("green",   1260, 660),\
+            Square("blue",    1260, 635),\
+            Square("grey",    1260, 605),\
+            Square("yellow",  1260, 560),\
+            Square("red",     1260, 500),\
+            Square("green",   1260, 450),\
+            Square("blue",    1260, 390),\
+            Square("grey",    1260, 230),\
+            Square("yellow",  1260, 220),\
+            Square("red",     1262, 175),\
+            Square("green",   1265, 130),\
+            Square("blue",    1270, 100),\
+            Square("grey",    1280, 60 ),\
+            Square("win",     1290, 25 )]
 
 class Questions:
     def __init__(self, color):
@@ -228,25 +223,18 @@ class Questions:
 
 
 class Player:
-    def __init__(self):
-        self.Square     = 0
-        self.Images     =[\
-                        pygame.image.load("playerred.png"),\
-                        pygame.image.load("playeryellow.png"),\
-                        pygame.image.load("playergreen.png"),\
-                        pygame.image.load("playerblue.png")]
+    def __init__(self, color):
+        self.at_number = 0
+        if color == "red" : self.Image = pygame.image.load("playerred.png")
+        if color == "yellow" : self.Image = pygame.image.load("playeryellow.png")
+        if color == "green": self.Image = pygame.image.load("playergreen.png")
+        if color == "blue": self.Image = pygame.image.load("playerblue.png")
 
     def SetPosition(self):
-        square = square() + dice.Roll()
+        self.at_number  = self.at_number  + dice.Number
 
-    def Draw(self, image_number): 
-        self.Display.blit(self.Images[image_number], (Square()))
-        self.Square = 0
-        self.Images =[\
-            pygame.image.load("playerred.png"),\
-            pygame.image.load("playeryellow.png"),\
-            pygame.image.load("playergreen.png"),\
-            pygame.image.load("playerblue.png")]
+    def Draw(self): 
+        game.Display.blit(self.Image, tower.Squares[self.at_number].GetPosition)
 
     # stel, dice.Roll gaf daadwerkelijk een cijfer terug (wat het niet doet). dan moet je het niet in de parameters doen van deze functie.
     # de parameters van de functie zijn locale variabelen voor alleen die functie. stel je noemt een parameter henk, en als je de functie oproept doe je:
@@ -294,17 +282,17 @@ def Terminate():
 # ------------------------------------------------------------------ RUNNING ------------------------------------------------------------#
 
 game                = Game()
-startbutton         = Button(40,    325,    235,    120,    "background_game_menu_button1.png", False, startgame) 
-tutorialbutton      = Button(900,   350,    320,    120,    "background_game_menu_button2.png", False, starttutorial) 
-settingsbutton      = Button(1330,  20,     150,    60,     "background_game_menu_button3.png", False, startsettings) 
-highscoresbutton    = Button(1330,  135,    150,    60,     "background_game_menu_button4.png", False, starthighscores) 
-instructionsbutton  = Button(7,     455,    155,    90,     "background_game_menu_button5.png", False, startinstructions) 
-rulesbutton         = Button(170,   500,    150,    90,     "background_game_menu_button6.png", False, startrules) 
-quitbutton          = Button(1380,  590,    100,    50,     "background_game_menu_button7.png", False, Terminate) 
-quitbutton2         = Button(1380,  670,    100,    50,     "background_emp2_button8.png",      False, Terminate) 
-menubutton          = Button(20,    670,    100,    50,     "background_emp2_button9.png",      False, startmenu) 
-dice                = Dice(270, 210, 116, 116, True)
-square              = Square()
+startbutton         = Button(40,    325,    235,    120,    "background_game_menu_button1.png", startgame) 
+tutorialbutton      = Button(900,   350,    320,    120,    "background_game_menu_button2.png", starttutorial) 
+settingsbutton      = Button(1330,  20,     150,    60,     "background_game_menu_button3.png", startsettings) 
+highscoresbutton    = Button(1330,  135,    150,    60,     "background_game_menu_button4.png", starthighscores) 
+instructionsbutton  = Button(7,     455,    155,    90,     "background_game_menu_button5.png", startinstructions) 
+rulesbutton         = Button(170,   500,    150,    90,     "background_game_menu_button6.png", startrules) 
+quitbutton          = Button(1380,  590,    100,    50,     "background_game_menu_button7.png", Terminate) 
+quitbutton2         = Button(1380,  670,    100,    50,     "background_emp2_button8.png",      Terminate) 
+menubutton          = Button(20,    670,    100,    50,     "background_emp2_button9.png",      startmenu) 
+dice                = Dice  (270,   210,    116,    116)
+tower               = Tower ()
 #geen coords maar 1e cijfer = square[] en 2e = image[], doe ik dat zo goed?
 #De constructor (de functie __init__ die een class uitvoert als je een instantie maakt) van class Player heeft geen parameters.
 # De eerste parameter (op welke square de player begint) is altijd hetzelfde. dus hoeven wij niet aan de constructor te geven als parameter (het is altijd 0).
@@ -318,12 +306,11 @@ square              = Square()
 #         if welke_kleur_ben_ik == "groen": self.Image = pygame.image.load("playergreen.png")
 #         if welke_kleur_ben_ik == "blauw": self.Image = pygame.image.load("playerblue.png")
 
-# player1 = Player("rood")
-# player2 = Player("geel")
-# player3 = Player("groen")
-# player4 = Player("blauw")
+player1 = Player("red")
+player2 = Player("yellow")
+player3 = Player("green")
+player4 = Player("blue")
 
-# Ik hoop dat ik hiermee verduidelijk dat je moet nadenken en niet blindelings dingen kopiëert van een class die eerder gemaakt is.
 
 game.Loop()
 Terminate()
