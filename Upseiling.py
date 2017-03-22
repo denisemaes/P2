@@ -106,10 +106,37 @@ class Game:
                 self.Draw(3)
                 quitbutton2.Draw()
                 menubutton.Draw()
-                dice.Draw()
                 player.Draw()
-                question.Draw()
-                self.Update() 
+                dice.Draw()
+                self.Update()
+                if dice.Rolling == True:
+                    #hier moet je gaan checken wat de start pos is en wat de dice roll is, setpos niet uitvoeren
+                    if tower.Squares[player.at_number].GetColor() == "yellow":#bepaal kleur van de vraag
+                        question.Number = int(random.randint(0,9))#bepaal nummber
+                        question.Draw()
+                        dice.Rolling = False 
+                        player.SetPosition() 
+                        self.Update()
+                    elif tower.Squares[player.at_number].GetColor()  == "red":#bepaal kleur van de vraag
+                        question.Number = int(random.randint(10,19))#bepaal nummber
+                        question.Draw()
+                        dice.Rolling = False 
+                        player.SetPosition() 
+                        self.Update()
+                    elif tower.Squares[player.at_number].GetColor()  == "green":#bepaal kleur van de vraag
+                        question.Number = int(random.randint(20,29))#bepaal nummber
+                        question.Draw()
+                        dice.Rolling = False 
+                        player.SetPosition() 
+                        self.Update()
+                    elif tower.Squares[player.at_number].GetColor()  == "blue":#bepaal kleur van de vraag
+                        question.Number = int(random.randint(30,39))#bepaal nummber
+                        question.Draw()
+                        dice.Rolling = False 
+                        player.SetPosition() 
+                        self.Update()
+                        #bepaal of vraag goed beantwoord is
+                    dice.Rolling = False #zet rolling naar false
             else: self.Terminate = True 
 
 class Button:
@@ -140,7 +167,8 @@ class Dice:
         self.Y          = y
         self.H          = h
         self.W          = w
-        self.Number     = 6
+        self.Rolling    = False
+        self.Number     = 0
         self.Images     =[\
                         pygame.image.load("diceroll.png"),\
                         pygame.image.load("dice1.png"),\
@@ -160,7 +188,9 @@ class Dice:
         if self.X + self.W > pygame.mouse.get_pos()[0] > self.X and self.Y + self.H >  pygame.mouse.get_pos()[1] > self.Y:
             game.Display.blit(self.Images [0], (self.X, self.Y))
             if pygame.mouse.get_pressed()[0] == True:
+                self.Rolling = True
                 self.Roll()
+                self.Rolling = False
 
     def Roll(self):
         self.Number = int(random.randint(1,6))
@@ -175,6 +205,9 @@ class Square:
 
     def GetPosition(self):
         return [self.X, self.Y]
+
+    def GetColor(self):
+        return [self.Color]
 
 class Tower:
     def __init__(self):
@@ -205,19 +238,50 @@ class Question:
         self.H          = h
         self.Number     = 0
         self.Images     = [\
-                        pygame.image.load("Q1.png"),\
-                        pygame.image.load("Q1.png"),\
-                        pygame.image.load("Q1.png"),\
-                        pygame.image.load("Q1.png"),\
-                        pygame.image.load("Q1.png"),\
-                        pygame.image.load("Q1.png")]
-        
-    def Cat(self):
-        if tower.Squares[0].Color    == 'red': 
-            self.Number = int(random.randint(0,5))
+                        pygame.image.load("QR1.png"),\
+                        pygame.image.load("QR2.png"),\
+                        pygame.image.load("QR3.png"),\
+                        pygame.image.load("QR4.png"),\
+                        pygame.image.load("QR5.png"),\
+                        pygame.image.load("QR6.png"),\
+                        pygame.image.load("QR7.png"),\
+                        pygame.image.load("QR8.png"),\
+                        pygame.image.load("QR9.png"),\
+                        pygame.image.load("QR10.png"),\
+                        pygame.image.load("QY1.png"),\
+                        pygame.image.load("QY2.png"),\
+                        pygame.image.load("QY3.png"),\
+                        pygame.image.load("QY4.png"),\
+                        pygame.image.load("QY5.png"),\
+                        pygame.image.load("QY6.png"),\
+                        pygame.image.load("QY7.png"),\
+                        pygame.image.load("QY8.png"),\
+                        pygame.image.load("QY9.png"),\
+                        pygame.image.load("QY10.png"),\
+                        pygame.image.load("QG1.png"),\
+                        pygame.image.load("QG2.png"),\
+                        pygame.image.load("QG3.png"),\
+                        pygame.image.load("QG4.png"),\
+                        pygame.image.load("QG5.png"),\
+                        pygame.image.load("QG6.png"),\
+                        pygame.image.load("QG7.png"),\
+                        pygame.image.load("QG8.png"),\
+                        pygame.image.load("QG9.png"),\
+                        pygame.image.load("QG10.png"),\
+                        pygame.image.load("QB1.png"),\
+                        pygame.image.load("QB2.png"),\
+                        pygame.image.load("QB3.png"),\
+                        pygame.image.load("QB4.png"),\
+                        pygame.image.load("QB5.png"),\
+                        pygame.image.load("QB6.png"),\
+                        pygame.image.load("QB7.png"),\
+                        pygame.image.load("QB8.png"),\
+                        pygame.image.load("QB9.png"),\
+                        pygame.image.load("QB10.png")]
 
-    def Draw(self): 
-        game.Display.blit(self.Images[self.Number], (self.X, self.Y)) 
+        def Draw(self):
+            game.Display.blit(self.Images[self.Number], (self.X, self.Y))
+
 
 
 class Player:
@@ -230,6 +294,7 @@ class Player:
 
     def SetPosition(self):
         self.at_number  = self.at_number + dice.Number
+        print(self.at_number)
 
     def Draw(self): 
         game.Display.blit(self.Image, tower.Squares[self.at_number].GetPosition())
