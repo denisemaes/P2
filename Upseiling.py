@@ -108,6 +108,7 @@ class Game:
                 menubutton.Draw()
                 dice.Draw()
                 player.Draw()
+                question.Draw()
                 self.Update() 
             else: self.Terminate = True 
 
@@ -163,7 +164,8 @@ class Dice:
 
     def Roll(self):
         self.Number = int(random.randint(1,6))
-   
+        return [self.Number]
+    
 
 class Square:
     def __init__(self, color, posx, posy):
@@ -196,70 +198,26 @@ class Tower:
             Square("win",     1290, 25 )]
 
 class Question:
-    def __init__(self, q, a, posx, posy):
-        self.Q          = q
-        self.A          = a
-        self.Posx       = x
-        self.Posx       = y
-        self.Color      = tower.Squares[0].Color 
-        self.atNumber   = 0
-        if self.Color   == 'red': 
-            self.Number = int(random.randint(0,9))
-        if self.Color   == 'yellow':
-            self.Number = int(random.randint(10,19))
-        if self.Color   == 'green':
-            self.Number = int(random.randint(20,29))
-        if self.Color   == 'blue': 
-            self.Number = int(random.randint(30,39))
-        if self.Color   == 'grey':
-            self.Number = int(random.randint(0,39))
-        def CheckAnswer(self):
-            return (answer)
+    def __init__(self, x, y, w, h):
+        self.X          = x
+        self.Y          = y
+        self.W          = w
+        self.H          = h
+        self.Number     = 0
+        self.Images     = [\
+                        pygame.image.load("Q1.png"),\
+                        pygame.image.load("Q1.png"),\
+                        pygame.image.load("Q1.png"),\
+                        pygame.image.load("Q1.png"),\
+                        pygame.image.load("Q1.png"),\
+                        pygame.image.load("Q1.png")]
+        
+    def Cat(self):
+        if tower.Squares[0].Color    == 'red': 
+            self.Number = int(random.randint(0,5))
 
-
-class Qlist:
-    def __init__(self, text):
-        self.Questions = [\
-        Question("Which escape room is most known? \n\n A. R'dam Escape \n B. Escape010 \n C. Room Escape \n D. Escaperooms", "B"),\
-        Question("What tour is not available? \n\n A. Segway \n B. Boat \n C. Car \n D. Bike", "C"),\
-        Question("Which of these stores is not located around the Koopgoot? \n\n A. H&M \n B. Media Markt \n C. The Sting \n Six", "B"),\
-        Question("For which museum is the monument The Destroyed City made? \n\n A. Harbormuseum \n B. Marinesmuseum \n C. Maritime Museum \n D. Futureland", "C"),\
-        Question("At which movie theatre is the Wildlife Film Festival? \n\n A. Cinerama \n B. Pathé de Kuip \n C. Pathé Schouwburgplein \n Euromast", "A"),\
-        Question("Where does Rotterdam Tour have its tours? \n\n A. Euromast \n B. Museumplein \n C. Markthal \n D. Central Station", "C"),\
-        Question("What country can you also visit in Miniworld Rotterdam? \n\n A. Luxembourg \n B. Germany \n C. France \n D. Spain", "A"),\
-        Question("What is the cultural and culinair tour called? \n\n A. Drive & Eat \n B. Bicycle Dine, \n C. Fly for food \n D. Bike & Bite", "D"),\
-        Question("Which of the following restaurantboats does not exist? \n\n A. Swanship \n B. Pancakeship \n C. Bearboat \n D. Tapasboat", "A"),\
-        Question("Where is the annual autumn carnaval? \n\n A. Stadhuisplein \n B. Pier 80 \n C. Schouwburgplein \n D. Mullerpier", "D"),\
-        Question("What is the only building left standing after WW2? \n\n A. Old Harbour \n B. VOC \n C. St Laurenschurch \n D. Euromast", "C"),\
-        Question("Who is the Night Mayor? \n\n A. Ahmed Aboutaleb \n B. Jules Deelder \n C. Willem Alexander \n D. Phillipe de Groot", "B"),\
-        Question("How did the city get its name? \n\n A. Merchants \n B. Rotte River \n C. the dike \n D. Unknown", "B"),\
-        Question("What was Katendrecht known for? \n\n A. Bakers \n B. Prostitutes \n C. old tree \n D. Meat", "B"),\
-        Question("When did the zoo open? \n\n A. 2000 \n B. 1975 \n C. 1915 \n D. 1855", "D"),\
-        Question("What is the official name of the Koopgoot? \n\n A. Underground shoppingstreet \n B. Beurstraverse \n C. Koopgoot \n D. Harbour", "B"),\
-        Question("Which building represents the reconstruction? \n\n A. Bijenkorf \n B. Cube houses \n C. Red Apple \n D. Movie Theater Pathe", "A"),\
-        Question("What was the only way to the centre during WW2? \n\n A. Nieuwe binnenweg \n B. Maasbridge \n C. Queensbridge \n D. Erasmusbridge", "B"),\
-        Question("Who was the architect that designed the Euromast? \n\n A. Ted Mosby \n B. Brinkman \n C. Koolhaas \n D. Maaskant", "D"),\
-        Question("What products did not used to get stored near the harbour? \n\n A. Sugar \n B. Salt \n C. Wool \n D. Cacao", "D"),\
-        Question("Which bridge is also called 'The Swan?' \n\n A. Willemsbridge \n B. Erasmusbridge \n C. Briennenoordbrug \n D. Queensbridge", "B"),\
-        Question("Which statement is true? \n\n A. Rotterdam is the capital of the Netherlands \n Rotterdam is the capital of South-Holland \n C. Rotterdam is the biggest city of the Netherlands \n D. Rotterdam has the biggest harbour", "D"),\
-        Question("Which one is the most important transport? \n\n A. Subway \n B. Car \n C. Bike \n D. Airplane", "A"),\
-        Question("How much rain is there on average? \n\n A. 760 to 780mm \n B. 780 to 800mm \n C. 800 to 820mm \n D. 820 to 850mm", "C"),\
-        Question("What is the oldest building? \n\n A. Cityhall \n B. St. Laurenschurch \n C. Euromast \n D. Hillegondachurch", "D"),\
-        Question("About how many living spaces are there? \n\n A. 150.000 \n B. 300.000 \n C. 450.000, \n 600.000", "C"),\
-        Question("How many passengers use public transport daily? \n\n A. 700.000 \n B. 800.000 \n C. 900.000 \n D. 1.000.000", "D"),\
-        Question("What is the oldest bridge? \n\n A. Willemsbridge \n B. Queensbridge \n C. Briennenoordbrug \n D. Erasmusbridge", "B"),\
-        Question("Another name for the city is? \n\n A. City of miracles \n B. City of cities \n C. City of bridges \n D. Harbour City", "D"),\
-        Question("What is Rotterdams biggest river? \n\n A. Maas \n B. Rijn \n C. Waal \n Eiffel", "A"),\
-        Question("In what year did the Tour de France kick off in Rotterdam? \n\n A. 2000 \n B. 2005 \n C. 2010 \n D.2015", "C"),\
-        Question("What is the yearly tennis event in Ahoy called? \n\n A. ABN AMRO World Tennis \n B. Ahoy Open \n C. Heineken open \n D. Harbor city event", "A"),\
-        Question("What is a hockeyclub? \n\n A. HVGR \n B. Focus \n C. HR \n D. HC Rotterdam", "D"),\
-        Question("Most populair sport? \n\n A. Fitness \n B. Soccer \n C. Climbing \n D. Basketball", "A"),\
-        Question("Who grew up in Rotterdam? \n\n A. Edith Bosch \n B. Denise Maes \n C. Marhinde Verkerk \n D. Dorian van Rijsselberge", "C"),\
-        Question("Where did WK rowing take place in 2016? \n\n A. Beatrix Baan \n B. Maasbaan \n C. Juliana Baan \n D. Willem Alexander Baan", "D"),\
-        Question("What position did Coun Moulijn play? \n\n A. Right back \n B. Left back \n C. Left winger \n D. Right winger", "C"),\
-        Question("What year did the baseball club Neptunes start? \n\n A. 1825 \n B. 1850 \n C. 1875 \n D. 1900", "D"),\
-        Question("What is the name of the stadion of soccer club Sparta? \n\n A. The tower \n B. Castle \n C. Kuip \n D. Arena", "B"),\
-        Question("How long is the NN marathon? \n\n A. 42,125 km \n B. 42,450 km \n C. 42,680 km \n D. 43,000 km", "A")]          
+    def Draw(self): 
+        game.Display.blit(self.Images[self.Number], (self.X, self.Y)) 
 
 
 class Player:
@@ -319,6 +277,7 @@ quitbutton          = Button(1380,  590,    100,    50,     "background_game_men
 quitbutton2         = Button(1380,  670,    100,    50,     "background_emp2_button8.png",      Terminate) 
 menubutton          = Button(20,    670,    100,    50,     "background_emp2_button9.png",      startmenu) 
 dice                = Dice  (270,   210,    116,    116)
+question            = Question(470, 80, 305, 380)
 tower               = Tower ()
 player              = Player("red")
 #player1             = Player("red")
