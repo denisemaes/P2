@@ -108,35 +108,9 @@ class Game:
                 menubutton.Draw()
                 player.Draw()
                 dice.Draw()
+                question.Draw()
                 self.Update()
-                if dice.Rolling == True:
-                    #hier moet je gaan checken wat de start pos is en wat de dice roll is, setpos niet uitvoeren
-                    if tower.Squares[player.at_number].GetColor() == "yellow":#bepaal kleur van de vraag
-                        question.Number = int(random.randint(0,9))#bepaal nummber
-                        question.Draw()
-                        dice.Rolling = False 
-                        player.SetPosition() 
-                        self.Update()
-                    elif tower.Squares[player.at_number].GetColor()  == "red":#bepaal kleur van de vraag
-                        question.Number = int(random.randint(10,19))#bepaal nummber
-                        question.Draw()
-                        dice.Rolling = False 
-                        player.SetPosition() 
-                        self.Update()
-                    elif tower.Squares[player.at_number].GetColor()  == "green":#bepaal kleur van de vraag
-                        question.Number = int(random.randint(20,29))#bepaal nummber
-                        question.Draw()
-                        dice.Rolling = False 
-                        player.SetPosition() 
-                        self.Update()
-                    elif tower.Squares[player.at_number].GetColor()  == "blue":#bepaal kleur van de vraag
-                        question.Number = int(random.randint(30,39))#bepaal nummber
-                        question.Draw()
-                        dice.Rolling = False 
-                        player.SetPosition() 
-                        self.Update()
-                        #bepaal of vraag goed beantwoord is
-                    dice.Rolling = False #zet rolling naar false
+               
             else: self.Terminate = True 
 
 class Button:
@@ -167,8 +141,8 @@ class Dice:
         self.Y          = y
         self.H          = h
         self.W          = w
-        self.Rolling    = False
         self.Number     = 0
+        self.Pressed    = False
         self.Images     =[\
                         pygame.image.load("diceroll.png"),\
                         pygame.image.load("dice1.png"),\
@@ -188,13 +162,16 @@ class Dice:
         if self.X + self.W > pygame.mouse.get_pos()[0] > self.X and self.Y + self.H >  pygame.mouse.get_pos()[1] > self.Y:
             game.Display.blit(self.Images [0], (self.X, self.Y))
             if pygame.mouse.get_pressed()[0] == True:
-                self.Rolling = True
                 self.Roll()
-                self.Rolling = False
+            if pygame.mouse.get_pressed()[0] == True:
+                self.Pressed = True
+            elif self.Pressed == True:
+                question.SetQuestion()
+                self.Pressed = False
 
     def Roll(self):
         self.Number = int(random.randint(1,6))
-        return [self.Number]
+        return (self.Number)
     
 
 class Square:
@@ -205,9 +182,6 @@ class Square:
 
     def GetPosition(self):
         return [self.X, self.Y]
-
-    def GetColor(self):
-        return [self.Color]
 
 class Tower:
     def __init__(self):
@@ -231,12 +205,11 @@ class Tower:
             Square("win",     1290, 25 )]
 
 class Question:
-    def __init__(self, x, y, w, h):
+    def __init__(self, x, y):
         self.X          = x
         self.Y          = y
-        self.W          = w
-        self.H          = h
         self.Number     = 0
+        self.QuestionTime = False
         self.Images     = [\
                         pygame.image.load("QR1.png"),\
                         pygame.image.load("QR2.png"),\
@@ -279,8 +252,20 @@ class Question:
                         pygame.image.load("QB9.png"),\
                         pygame.image.load("QB10.png")]
 
-        def Draw(self):
+    def Draw(self):
+        if self.QuestionTime == True:
             game.Display.blit(self.Images[self.Number], (self.X, self.Y))
+
+    def SetQuestion(self):
+        color = tower.Squares[player.at_number + dice.Number].Color
+        if      color == "red":     self.Number = random.randint(0,9)
+        elif    color == "yellow":  self.Number = random.randint(10,19)
+        elif    color == "green":   self.Number = random.randint(20,29)
+        elif    color == "blue":    self.Number = random.randint(30,39)
+        elif    color == "grey":    self.Number = random.randint(0,39)
+        self.QuestionTime = True
+
+
 
 
 
@@ -342,7 +327,7 @@ quitbutton          = Button(1380,  590,    100,    50,     "background_game_men
 quitbutton2         = Button(1380,  670,    100,    50,     "background_emp2_button8.png",      Terminate) 
 menubutton          = Button(20,    670,    100,    50,     "background_emp2_button9.png",      startmenu) 
 dice                = Dice  (270,   210,    116,    116)
-question            = Question(470, 80, 305, 380)
+question            = Question(470, 80)
 tower               = Tower ()
 player              = Player("red")
 #player1             = Player("red")
