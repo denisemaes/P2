@@ -109,6 +109,10 @@ class Game:
                 player.Draw()
                 dice.Draw()
                 question.Draw()
+                qbuttona.Draw()
+                qbuttonb.Draw()
+                qbuttonc.Draw()
+                qbuttond.Draw()
                 self.Update()
                
             else: self.Terminate = True 
@@ -206,11 +210,12 @@ class Tower:
 
 class Question:
     def __init__(self, x, y):
-        self.X          = x
-        self.Y          = y
-        self.Number     = 0
+        self.X            = x
+        self.Y            = y
+        self.Number       = 0
         self.QuestionTime = False
-        self.Images     = [\
+        self.Answer       = ""
+        self.Images       = [\
                         pygame.image.load("QR1.png"),\
                         pygame.image.load("QR2.png"),\
                         pygame.image.load("QR3.png"),\
@@ -265,6 +270,54 @@ class Question:
         elif    color == "grey":    self.Number = random.randint(0,39)
         self.QuestionTime = True
 
+    def GetAnswer(self):
+        if   self.Number[0]  and self.Answer == "B": self.Correct = True
+        elif self.Number[1]  and self.Answer == "C": self.Correct = True
+        elif self.Number[2]  and self.Answer == "B": self.Correct = True
+        elif self.Number[3]  and self.Answer == "C": self.Correct = True
+        elif self.Number[4]  and self.Answer == "A": self.Correct = True
+        elif self.Number[5]  and self.Answer == "C": self.Correct = True
+        elif self.Number[6]  and self.Answer == "A": self.Correct = True
+        elif self.Number[7]  and self.Answer == "D": self.Correct = True
+        elif self.Number[8]  and self.Answer == "A": self.Correct = True
+        elif self.Number[9]  and self.Answer == "D": self.Correct = True
+        elif self.Number[10] and self.Answer == "C": self.Correct = True
+        elif self.Number[11] and self.Answer == "B": self.Correct = True
+        elif self.Number[12] and self.Answer == "B": self.Correct = True
+        elif self.Number[13] and self.Answer == "B": self.Correct = True
+        elif self.Number[14] and self.Answer == "D": self.Correct = True
+        elif self.Number[15] and self.Answer == "B": self.Correct = True
+        elif self.Number[16] and self.Answer == "A": self.Correct = True
+        elif self.Number[17] and self.Answer == "B": self.Correct = True
+        elif self.Number[18] and self.Answer == "D": self.Correct = True
+        elif self.Number[19] and self.Answer == "D": self.Correct = True
+        elif self.Number[20] and self.Answer == "B": self.Correct = True
+        elif self.Number[21] and self.Answer == "D": self.Correct = True
+        elif self.Number[22] and self.Answer == "A": self.Correct = True
+        elif self.Number[23] and self.Answer == "C": self.Correct = True
+        elif self.Number[24] and self.Answer == "D": self.Correct = True
+        elif self.Number[25] and self.Answer == "C": self.Correct = True
+        elif self.Number[26] and self.Answer == "D": self.Correct = True
+        elif self.Number[27] and self.Answer == "B": self.Correct = True
+        elif self.Number[28] and self.Answer == "D": self.Correct = True
+        elif self.Number[29] and self.Answer == "A": self.Correct = True
+        elif self.Number[30] and self.Answer == "C": self.Correct = True
+        elif self.Number[31] and self.Answer == "A": self.Correct = True
+        elif self.Number[32] and self.Answer == "D": self.Correct = True
+        elif self.Number[33] and self.Answer == "A": self.Correct = True
+        elif self.Number[34] and self.Answer == "C": self.Correct = True
+        elif self.Number[35] and self.Answer == "D": self.Correct = True
+        elif self.Number[36] and self.Answer == "C": self.Correct = True
+        elif self.Number[37] and self.Answer == "D": self.Correct = True
+        elif self.Number[38] and self.Answer == "B": self.Correct = True
+        elif self.Number[39] and self.Answer == "A": self.Correct = True
+        else: self.Correct = False
+        if self.Correct == True:
+            player.SetPosition()
+            self.QuestionTime = False
+        elif self.Correct == False:
+            self.QuestionTime = False
+
 
 
 
@@ -308,6 +361,17 @@ def startrules():
 def startmenu():
     game.Level = "menu"
 
+def QA():
+    question.Answer = "A"
+
+def QB():
+    question.Answer = "B"
+
+def QC():
+    question.Answer = "C"
+
+def QD():
+    question.Answer = "D"
 
 
 def Terminate():
@@ -319,13 +383,17 @@ def Terminate():
 game                = Game()
 startbutton         = Button(40,    325,    235,    120,    "background_game_menu_button1.png", startgame) 
 tutorialbutton      = Button(900,   350,    320,    120,    "background_game_menu_button2.png", starttutorial) 
-settingsbutton      = Button(1330,  20,     150,    60,     "background_game_menu_button3.png", startsettings) 
-highscoresbutton    = Button(1330,  135,    150,    60,     "background_game_menu_button4.png", starthighscores) 
-instructionsbutton  = Button(7,     455,    155,    90,     "background_game_menu_button5.png", startinstructions) 
-rulesbutton         = Button(170,   500,    150,    90,     "background_game_menu_button6.png", startrules) 
-quitbutton          = Button(1380,  590,    100,    50,     "background_game_menu_button7.png", Terminate) 
-quitbutton2         = Button(1380,  670,    100,    50,     "background_emp2_button8.png",      Terminate) 
-menubutton          = Button(20,    670,    100,    50,     "background_emp2_button9.png",      startmenu) 
+settingsbutton      = Button(1330,   20,    150,     60,    "background_game_menu_button3.png", startsettings) 
+highscoresbutton    = Button(1330,  135,    150,     60,    "background_game_menu_button4.png", starthighscores) 
+instructionsbutton  = Button(7,     455,    155,     90,    "background_game_menu_button5.png", startinstructions) 
+rulesbutton         = Button(170,   500,    150,     90,    "background_game_menu_button6.png", startrules) 
+quitbutton          = Button(1380,  590,    100,     50,    "background_game_menu_button7.png", Terminate) 
+quitbutton2         = Button(1380,  670,    100,     50,    "background_emp2_button8.png",      Terminate) 
+menubutton          = Button(20,    670,    100,     50,    "background_emp2_button9.png",      startmenu) 
+qbuttona            = Button(431,   610,     57,    113,    "Overlay_A.png",                    QA) 
+qbuttonb            = Button(555,   605,     61,    110,    "Overlay_B.png",                    QB) 
+qbuttonc            = Button(674,   603,     65,    112,    "Overlay_C.png",                    QC) 
+qbuttond            = Button(806,   609,     57,    119,    "Overlay_D.png",                    QD) 
 dice                = Dice  (270,   210,    116,    116)
 question            = Question(470, 80)
 tower               = Tower ()
