@@ -260,6 +260,8 @@ class Question:
     def Draw(self):
         if self.QuestionTime == True:
             game.Display.blit(self.Images[self.Number], (self.X, self.Y))
+            print ("print")
+            self.GetAnswer()
 
     def SetQuestion(self):
         color = tower.Squares[player.at_number + dice.Number].Color
@@ -269,54 +271,55 @@ class Question:
         elif    color == "blue":    self.Number = random.randint(30,39)
         elif    color == "grey":    self.Number = random.randint(0,39)
         self.QuestionTime = True
+        self.GetAnswer()
+        if self.Correct == True: player.SetPosition()
+        self.QuestionTime = False
+
 
     def GetAnswer(self):
-        if   self.Number[0]  and self.Answer == "B": self.Correct = True
-        elif self.Number[1]  and self.Answer == "C": self.Correct = True
-        elif self.Number[2]  and self.Answer == "B": self.Correct = True
-        elif self.Number[3]  and self.Answer == "C": self.Correct = True
-        elif self.Number[4]  and self.Answer == "A": self.Correct = True
-        elif self.Number[5]  and self.Answer == "C": self.Correct = True
-        elif self.Number[6]  and self.Answer == "A": self.Correct = True
-        elif self.Number[7]  and self.Answer == "D": self.Correct = True
-        elif self.Number[8]  and self.Answer == "A": self.Correct = True
-        elif self.Number[9]  and self.Answer == "D": self.Correct = True
-        elif self.Number[10] and self.Answer == "C": self.Correct = True
-        elif self.Number[11] and self.Answer == "B": self.Correct = True
-        elif self.Number[12] and self.Answer == "B": self.Correct = True
-        elif self.Number[13] and self.Answer == "B": self.Correct = True
-        elif self.Number[14] and self.Answer == "D": self.Correct = True
-        elif self.Number[15] and self.Answer == "B": self.Correct = True
-        elif self.Number[16] and self.Answer == "A": self.Correct = True
-        elif self.Number[17] and self.Answer == "B": self.Correct = True
-        elif self.Number[18] and self.Answer == "D": self.Correct = True
-        elif self.Number[19] and self.Answer == "D": self.Correct = True
-        elif self.Number[20] and self.Answer == "B": self.Correct = True
-        elif self.Number[21] and self.Answer == "D": self.Correct = True
-        elif self.Number[22] and self.Answer == "A": self.Correct = True
-        elif self.Number[23] and self.Answer == "C": self.Correct = True
-        elif self.Number[24] and self.Answer == "D": self.Correct = True
-        elif self.Number[25] and self.Answer == "C": self.Correct = True
-        elif self.Number[26] and self.Answer == "D": self.Correct = True
-        elif self.Number[27] and self.Answer == "B": self.Correct = True
-        elif self.Number[28] and self.Answer == "D": self.Correct = True
-        elif self.Number[29] and self.Answer == "A": self.Correct = True
-        elif self.Number[30] and self.Answer == "C": self.Correct = True
-        elif self.Number[31] and self.Answer == "A": self.Correct = True
-        elif self.Number[32] and self.Answer == "D": self.Correct = True
-        elif self.Number[33] and self.Answer == "A": self.Correct = True
-        elif self.Number[34] and self.Answer == "C": self.Correct = True
-        elif self.Number[35] and self.Answer == "D": self.Correct = True
-        elif self.Number[36] and self.Answer == "C": self.Correct = True
-        elif self.Number[37] and self.Answer == "D": self.Correct = True
-        elif self.Number[38] and self.Answer == "B": self.Correct = True
-        elif self.Number[39] and self.Answer == "A": self.Correct = True
+        if   self.Number == 0  and self.Answer == "B": self.Correct = True
+        elif self.Number == 1  and self.Answer == "C": self.Correct = True
+        elif self.Number == 2  and self.Answer == "B": self.Correct = True
+        elif self.Number == 3  and self.Answer == "C": self.Correct = True
+        elif self.Number == 4  and self.Answer == "A": self.Correct = True
+        elif self.Number == 5  and self.Answer == "C": self.Correct = True
+        elif self.Number == 6  and self.Answer == "A": self.Correct = True
+        elif self.Number == 7  and self.Answer == "D": self.Correct = True
+        elif self.Number == 8  and self.Answer == "A": self.Correct = True
+        elif self.Number == 9  and self.Answer == "D": self.Correct = True
+        elif self.Number == 10 and self.Answer == "C": self.Correct = True
+        elif self.Number == 11 and self.Answer == "B": self.Correct = True
+        elif self.Number == 12 and self.Answer == "B": self.Correct = True
+        elif self.Number == 13 and self.Answer == "B": self.Correct = True
+        elif self.Number == 14 and self.Answer == "D": self.Correct = True
+        elif self.Number == 15 and self.Answer == "B": self.Correct = True
+        elif self.Number == 16 and self.Answer == "A": self.Correct = True
+        elif self.Number == 17 and self.Answer == "B": self.Correct = True
+        elif self.Number == 18 and self.Answer == "D": self.Correct = True
+        elif self.Number == 19 and self.Answer == "D": self.Correct = True
+        elif self.Number == 20 and self.Answer == "B": self.Correct = True
+        elif self.Number == 21 and self.Answer == "D": self.Correct = True
+        elif self.Number == 22 and self.Answer == "A": self.Correct = True
+        elif self.Number == 23 and self.Answer == "C": self.Correct = True
+        elif self.Number == 24 and self.Answer == "D": self.Correct = True
+        elif self.Number == 25 and self.Answer == "C": self.Correct = True
+        elif self.Number == 26 and self.Answer == "D": self.Correct = True
+        elif self.Number == 27 and self.Answer == "B": self.Correct = True
+        elif self.Number == 28 and self.Answer == "D": self.Correct = True
+        elif self.Number == 29 and self.Answer == "A": self.Correct = True
+        elif self.Number == 30 and self.Answer == "C": self.Correct = True
+        elif self.Number == 31 and self.Answer == "A": self.Correct = True
+        elif self.Number == 32 and self.Answer == "D": self.Correct = True
+        elif self.Number == 33 and self.Answer == "A": self.Correct = True
+        elif self.Number == 34 and self.Answer == "C": self.Correct = True
+        elif self.Number == 35 and self.Answer == "D": self.Correct = True
+        elif self.Number == 36 and self.Answer == "C": self.Correct = True
+        elif self.Number == 37 and self.Answer == "D": self.Correct = True
+        elif self.Number == 38 and self.Answer == "B": self.Correct = True
+        elif self.Number == 39 and self.Answer == "A": self.Correct = True
         else: self.Correct = False
-        if self.Correct == True:
-            player.SetPosition()
-            self.QuestionTime = False
-        elif self.Correct == False:
-            self.QuestionTime = False
+
+
 
 
 
