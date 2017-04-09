@@ -16,6 +16,14 @@ Blue            = (0,       0,      200)
 Yellow          = (255,     204,    0)
 Grey            = (192,     192,    192)
 
+# Sounds:
+correcteffect   = pygame.mixer.Sound('right.wav')
+incorrecteffect = pygame.mixer.Sound('wrong.wav')
+pling           = pygame.mixer.Sound('danzon.wav')
+applause        = pygame.mixer.Sound('applause.wav')
+pygame.mixer.music.load('happybeesurf.wav')
+
+
 #----------------------------------------------------------- CLASSES ------------------------------------------------------
 
 class Game:
@@ -27,6 +35,7 @@ class Game:
         self.Display    = pygame.display.set_mode((self.Width, self.Height))
         self.Terminate  = False
         self.Level      = "menu"
+        self.Turn       = "player1"
         self.Images     = [\
                         pygame.image.load("background_game_menu.jpg"),\
                         pygame.image.load("background_empty.jpg"),\
@@ -45,6 +54,7 @@ class Game:
         self.Clock.tick(self.FPS)
 
     def Loop(self): 
+        pygame.mixer.music.play(-1)
         while not self.Terminate:
             if self.Level == "menu": 
                 for event in pygame.event.get(): 
@@ -106,16 +116,23 @@ class Game:
                 self.Draw(3)
                 quitbutton2.Draw()
                 menubutton.Draw()
-                player.Draw()
+                player1.Draw()
+                player2.Draw()
                 dice.Draw()
                 question.Draw()
-                qbuttona.Draw()
-                qbuttonb.Draw()
-                qbuttonc.Draw()
-                qbuttond.Draw()
-                self.Update()
-               
+                self.Update()    
+            elif self.Level == "winning": 
+                pygame.mixer.music.stop()
+                applause.play()
+                for event in pygame.event.get(): 
+                    if event.type == pygame.QUIT: 
+                        self.Terminate = True 
+                self.Draw(4)
+                quitbutton2.Draw()
+                menubutton.Draw()
+                self.Update() 
             else: self.Terminate = True 
+
 
 class Button:
     def __init__(self, x, y, w, h, image, action):
@@ -185,7 +202,14 @@ class Square:
         self.Y      = posy
 
     def GetPosition(self):
-        return [self.X, self.Y]
+        if tower.Squares[player1.at_number <= 16] :
+            return [self.X, self.Y]
+        else:
+            winning()
+        if tower.Squares[player2.at_number <= 16] :
+            return [self.X, self.Y]
+        else:
+            winning()
 
 class Tower:
     def __init__(self):
@@ -206,6 +230,16 @@ class Tower:
             Square("green",   1265, 130),\
             Square("blue",    1270, 100),\
             Square("grey",    1280, 60 ),\
+            Square("win",     1290, 25 ),\
+            Square("win",     1290, 25 ),\
+            Square("win",     1290, 25 ),\
+            Square("win",     1290, 25 ),\
+            Square("win",     1290, 25 ),\
+            Square("win",     1290, 25 ),\
+            Square("win",     1290, 25 ),\
+            Square("win",     1290, 25 ),\
+            Square("win",     1290, 25 ),\
+            Square("win",     1290, 25 ),\
             Square("win",     1290, 25 )]
 
 class Question:
@@ -215,6 +249,11 @@ class Question:
         self.Number       = 0
         self.QuestionTime = False
         self.Answer       = ""
+        self.Buttons      = [\
+                            Button(431,   610,     57,    113,    "Overlay_A.png",    self.QA),\
+                            Button(555,   605,     61,    110,    "Overlay_B.png",    self.QB),\
+                            Button(674,   603,     65,    112,    "Overlay_C.png",    self.QC),\
+                            Button(806,   609,     57,    119,    "Overlay_D.png",    self.QD)]
         self.Images       = [\
                         pygame.image.load("QR1.png"),\
                         pygame.image.load("QR2.png"),\
@@ -255,69 +294,125 @@ class Question:
                         pygame.image.load("QB7.png"),\
                         pygame.image.load("QB8.png"),\
                         pygame.image.load("QB9.png"),\
-                        pygame.image.load("QB10.png")]
+                        pygame.image.load("QB10.png"),\
+                        pygame.image.load("correct.png"),\
+                        pygame.image.load("incorrect.png")]
 
     def Draw(self):
         if self.QuestionTime == True:
             game.Display.blit(self.Images[self.Number], (self.X, self.Y))
-            print ("print")
-            self.GetAnswer()
+            for button in self.Buttons:
+                button.Draw()
 
+            
     def SetQuestion(self):
-        color = tower.Squares[player.at_number + dice.Number].Color
+        if game.Turn == "player1":
+            color = tower.Squares[player1.at_number + dice.Number].Color
+        elif game.Turn == "player2":
+            color = tower.Squares[player2.at_number + dice.Number].Color
         if      color == "red":     self.Number = random.randint(0,9)
         elif    color == "yellow":  self.Number = random.randint(10,19)
         elif    color == "green":   self.Number = random.randint(20,29)
         elif    color == "blue":    self.Number = random.randint(30,39)
         elif    color == "grey":    self.Number = random.randint(0,39)
         self.QuestionTime = True
-        self.GetAnswer()
-        if self.Correct == True: player.SetPosition()
-        self.QuestionTime = False
+
 
 
     def GetAnswer(self):
-        if   self.Number == 0  and self.Answer == "B": self.Correct = True
-        elif self.Number == 1  and self.Answer == "C": self.Correct = True
-        elif self.Number == 2  and self.Answer == "B": self.Correct = True
-        elif self.Number == 3  and self.Answer == "C": self.Correct = True
-        elif self.Number == 4  and self.Answer == "A": self.Correct = True
-        elif self.Number == 5  and self.Answer == "C": self.Correct = True
-        elif self.Number == 6  and self.Answer == "A": self.Correct = True
-        elif self.Number == 7  and self.Answer == "D": self.Correct = True
-        elif self.Number == 8  and self.Answer == "A": self.Correct = True
-        elif self.Number == 9  and self.Answer == "D": self.Correct = True
-        elif self.Number == 10 and self.Answer == "C": self.Correct = True
-        elif self.Number == 11 and self.Answer == "B": self.Correct = True
-        elif self.Number == 12 and self.Answer == "B": self.Correct = True
-        elif self.Number == 13 and self.Answer == "B": self.Correct = True
-        elif self.Number == 14 and self.Answer == "D": self.Correct = True
-        elif self.Number == 15 and self.Answer == "B": self.Correct = True
-        elif self.Number == 16 and self.Answer == "A": self.Correct = True
-        elif self.Number == 17 and self.Answer == "B": self.Correct = True
-        elif self.Number == 18 and self.Answer == "D": self.Correct = True
-        elif self.Number == 19 and self.Answer == "D": self.Correct = True
-        elif self.Number == 20 and self.Answer == "B": self.Correct = True
-        elif self.Number == 21 and self.Answer == "D": self.Correct = True
-        elif self.Number == 22 and self.Answer == "A": self.Correct = True
-        elif self.Number == 23 and self.Answer == "C": self.Correct = True
-        elif self.Number == 24 and self.Answer == "D": self.Correct = True
-        elif self.Number == 25 and self.Answer == "C": self.Correct = True
-        elif self.Number == 26 and self.Answer == "D": self.Correct = True
-        elif self.Number == 27 and self.Answer == "B": self.Correct = True
-        elif self.Number == 28 and self.Answer == "D": self.Correct = True
-        elif self.Number == 29 and self.Answer == "A": self.Correct = True
-        elif self.Number == 30 and self.Answer == "C": self.Correct = True
-        elif self.Number == 31 and self.Answer == "A": self.Correct = True
-        elif self.Number == 32 and self.Answer == "D": self.Correct = True
-        elif self.Number == 33 and self.Answer == "A": self.Correct = True
-        elif self.Number == 34 and self.Answer == "C": self.Correct = True
-        elif self.Number == 35 and self.Answer == "D": self.Correct = True
-        elif self.Number == 36 and self.Answer == "C": self.Correct = True
-        elif self.Number == 37 and self.Answer == "D": self.Correct = True
-        elif self.Number == 38 and self.Answer == "B": self.Correct = True
-        elif self.Number == 39 and self.Answer == "A": self.Correct = True
-        else: self.Correct = False
+        if game.Turn == "player2":
+            self.Answer = random.choice("A", "B", "C", "D")
+        elif game.Turn == "player1": 
+            if   self.Number == 0  and self.Answer == "B": self.Correct = True
+            elif self.Number == 1  and self.Answer == "C": self.Correct = True
+            elif self.Number == 2  and self.Answer == "B": self.Correct = True
+            elif self.Number == 3  and self.Answer == "C": self.Correct = True
+            elif self.Number == 4  and self.Answer == "A": self.Correct = True
+            elif self.Number == 5  and self.Answer == "C": self.Correct = True
+            elif self.Number == 6  and self.Answer == "A": self.Correct = True
+            elif self.Number == 7  and self.Answer == "D": self.Correct = True
+            elif self.Number == 8  and self.Answer == "A": self.Correct = True
+            elif self.Number == 9  and self.Answer == "D": self.Correct = True
+            elif self.Number == 10 and self.Answer == "C": self.Correct = True
+            elif self.Number == 11 and self.Answer == "B": self.Correct = True
+            elif self.Number == 12 and self.Answer == "B": self.Correct = True
+            elif self.Number == 13 and self.Answer == "B": self.Correct = True
+            elif self.Number == 14 and self.Answer == "D": self.Correct = True
+            elif self.Number == 15 and self.Answer == "B": self.Correct = True
+            elif self.Number == 16 and self.Answer == "A": self.Correct = True
+            elif self.Number == 17 and self.Answer == "B": self.Correct = True
+            elif self.Number == 18 and self.Answer == "D": self.Correct = True
+            elif self.Number == 19 and self.Answer == "D": self.Correct = True
+            elif self.Number == 20 and self.Answer == "B": self.Correct = True
+            elif self.Number == 21 and self.Answer == "D": self.Correct = True
+            elif self.Number == 22 and self.Answer == "A": self.Correct = True
+            elif self.Number == 23 and self.Answer == "C": self.Correct = True
+            elif self.Number == 24 and self.Answer == "D": self.Correct = True
+            elif self.Number == 25 and self.Answer == "C": self.Correct = True
+            elif self.Number == 26 and self.Answer == "D": self.Correct = True
+            elif self.Number == 27 and self.Answer == "B": self.Correct = True
+            elif self.Number == 28 and self.Answer == "D": self.Correct = True
+            elif self.Number == 29 and self.Answer == "A": self.Correct = True
+            elif self.Number == 30 and self.Answer == "C": self.Correct = True
+            elif self.Number == 31 and self.Answer == "A": self.Correct = True
+            elif self.Number == 32 and self.Answer == "D": self.Correct = True
+            elif self.Number == 33 and self.Answer == "A": self.Correct = True
+            elif self.Number == 34 and self.Answer == "C": self.Correct = True
+            elif self.Number == 35 and self.Answer == "D": self.Correct = True
+            elif self.Number == 36 and self.Answer == "C": self.Correct = True
+            elif self.Number == 37 and self.Answer == "D": self.Correct = True
+            elif self.Number == 38 and self.Answer == "B": self.Correct = True
+            elif self.Number == 39 and self.Answer == "A": self.Correct = True
+            else: self.Correct = False
+            if self.Correct == True and game.Turn == "player1": 
+                player1.SetPosition() 
+                self.CorrectA()
+            elif self.Correct == False:
+                self.InCorrectA()
+            self.QuestionTime = False
+            TurnOver()
+            if self.Correct == True and game.Turn == "player2": 
+                player2.SetPosition() 
+                self.CorrectA()
+            elif self.Correct == False:
+                self.InCorrectA()
+            self.QuestionTime = False
+            TurnOver()
+
+    def CorrectA(self):
+        checking = True
+        while checking == True:
+            game.Display.blit(self.Images[40], (0, 0))
+            correcteffect.play()
+            game.Update()
+            pygame.time.wait(1000)
+            checking = False
+
+    def InCorrectA(self):
+        checking = True
+        while checking == True:
+            game.Display.blit(self.Images[41], (0, 0))
+            incorrecteffect.play()
+            game.Update()
+            pygame.time.wait(1000)
+            checking = False
+
+    def QA(self):
+        question.Answer = "A"
+        question.GetAnswer()
+
+
+    def QB(self):
+        question.Answer = "B"
+        question.GetAnswer()
+
+    def QC(self):
+        question.Answer = "C"
+        question.GetAnswer()
+
+    def QD(self):
+        question.Answer = "D"
+        question.GetAnswer()
 
 
 
@@ -328,17 +423,25 @@ class Question:
 class Player:
     def __init__(self, color):
         self.at_number = 0
-        if color == "red"       : self.Image = pygame.image.load("playerred.png")
-        if color == "yellow"    : self.Image = pygame.image.load("playeryellow.png")
-        if color == "green"     : self.Image = pygame.image.load("playergreen.png")
-        if color == "blue"      : self.Image = pygame.image.load("playerblue.png")
+        if game.Turn == "player1":
+            color == "red"       
+            self.Image = pygame.image.load("playerred.png")
+        elif game.Turn == "player1":
+            color == "yellow"    
+            self.Image = pygame.image.load("playeryellow.png")
+       
 
     def SetPosition(self):
-        self.at_number  = self.at_number + dice.Number
+        self.at_number  = self.at_number + 1
+        if self.at_number >= 16:
+            winning()
         print(self.at_number)
+
 
     def Draw(self): 
         game.Display.blit(self.Image, tower.Squares[self.at_number].GetPosition())
+
+
 
 
 # ------------------------------------------------------------------ FUNCTIONS ------------------------------------------------------------#
@@ -364,18 +467,14 @@ def startrules():
 def startmenu():
     game.Level = "menu"
 
-def QA():
-    question.Answer = "A"
+def winning():
+    game.Level ="winning"
 
-def QB():
-    question.Answer = "B"
-
-def QC():
-    question.Answer = "C"
-
-def QD():
-    question.Answer = "D"
-
+def TurnOver():
+    if game.Turn == "player1":
+        game.Turn = "player2"
+    elif game.Turn == "player2":
+        game.Turn = "player1"
 
 def Terminate():
     pygame.quit()
@@ -393,17 +492,10 @@ rulesbutton         = Button(170,   500,    150,     90,    "background_game_men
 quitbutton          = Button(1380,  590,    100,     50,    "background_game_menu_button7.png", Terminate) 
 quitbutton2         = Button(1380,  670,    100,     50,    "background_emp2_button8.png",      Terminate) 
 menubutton          = Button(20,    670,    100,     50,    "background_emp2_button9.png",      startmenu) 
-qbuttona            = Button(431,   610,     57,    113,    "Overlay_A.png",                    QA) 
-qbuttonb            = Button(555,   605,     61,    110,    "Overlay_B.png",                    QB) 
-qbuttonc            = Button(674,   603,     65,    112,    "Overlay_C.png",                    QC) 
-qbuttond            = Button(806,   609,     57,    119,    "Overlay_D.png",                    QD) 
 dice                = Dice  (270,   210,    116,    116)
 question            = Question(470, 80)
 tower               = Tower ()
-player              = Player("red")
-#player1             = Player("red")
-#player2             = Player("yellow")
-#player3             = Player("green")
-#player4             = Player("blue")
+player1              = Player("red")
+player2              = Player("yellow")
 game.Loop()
 Terminate()
