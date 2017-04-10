@@ -366,18 +366,24 @@ class Question:
             else: self.Correct = False
             if self.Correct == True and game.Turn == "player1": 
                 player1.SetPosition() 
+                player1.score += 1
                 self.CorrectA()
+                TurnOver()
             elif self.Correct == False:
                 self.InCorrectA()
+                player1.score -=1
+                TurnOver()
             self.QuestionTime = False
-            TurnOver()
             if self.Correct == True and game.Turn == "player2": 
+                player2.score += 1
                 player2.SetPosition() 
                 self.CorrectA()
+                TurnOver()
             elif self.Correct == False:
                 self.InCorrectA()
+                player2.score -=1
+                TurnOver()
             self.QuestionTime = False
-            TurnOver()
 
     def CorrectA(self):
         checking = True
@@ -421,12 +427,13 @@ class Question:
 
 
 class Player:
-    def __init__(self, color):
+    def __init__(self, color, score):
         self.at_number = 0
+        self.score = 0
         if game.Turn == "player1":
             color == "red"       
             self.Image = pygame.image.load("playerred.png")
-        elif game.Turn == "player1":
+        elif game.Turn == "player2":
             color == "yellow"    
             self.Image = pygame.image.load("playeryellow.png")
        
@@ -495,7 +502,7 @@ menubutton          = Button(20,    670,    100,     50,    "background_emp2_but
 dice                = Dice  (270,   210,    116,    116)
 question            = Question(470, 80)
 tower               = Tower ()
-player1              = Player("red")
-player2              = Player("yellow")
+player1             = Player("red", 0)
+player2             = Player("yellow", 0)
 game.Loop()
 Terminate()
