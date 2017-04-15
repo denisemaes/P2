@@ -111,10 +111,6 @@ class Game:
                 self.Draw(3)
                 quitbutton2.Draw()
                 menubutton.Draw()
-                if self.Turn == "player 1":
-                    text('Turn: Player 1', 150, (game.Width/4),(game.Height/3), Black)
-                if self.Turn == "player 2":
-                    text('Turn: Player 1', 150, (game.Width/4),(game.Height/3), Black)
                 player2.Draw()                
                 player1.Draw()
                 dice.Draw()
@@ -328,64 +324,11 @@ class Question:
     def setCorrect(self, number, choice):
         self.Number = number
         self.Answer = choice
-        if   self.Number == 0  and self.Answer == "B": self.Correct = True
-        elif self.Number == 1  and self.Answer == "C": self.Correct = True
-        elif self.Number == 2  and self.Answer == "B": self.Correct = True
-        elif self.Number == 3  and self.Answer == "C": self.Correct = True
-        elif self.Number == 4  and self.Answer == "A": self.Correct = True
-        elif self.Number == 5  and self.Answer == "C": self.Correct = True
-        elif self.Number == 6  and self.Answer == "A": self.Correct = True
-        elif self.Number == 7  and self.Answer == "D": self.Correct = True
-        elif self.Number == 8  and self.Answer == "A": self.Correct = True
-        elif self.Number == 9  and self.Answer == "D": self.Correct = True
-        elif self.Number == 10 and self.Answer == "C": self.Correct = True
-        elif self.Number == 11 and self.Answer == "B": self.Correct = True
-        elif self.Number == 12 and self.Answer == "B": self.Correct = True
-        elif self.Number == 13 and self.Answer == "B": self.Correct = True
-        elif self.Number == 14 and self.Answer == "D": self.Correct = True
-        elif self.Number == 15 and self.Answer == "B": self.Correct = True
-        elif self.Number == 16 and self.Answer == "A": self.Correct = True
-        elif self.Number == 17 and self.Answer == "B": self.Correct = True
-        elif self.Number == 18 and self.Answer == "D": self.Correct = True
-        elif self.Number == 19 and self.Answer == "D": self.Correct = True
-        elif self.Number == 20 and self.Answer == "B": self.Correct = True
-        elif self.Number == 21 and self.Answer == "D": self.Correct = True
-        elif self.Number == 22 and self.Answer == "A": self.Correct = True
-        elif self.Number == 23 and self.Answer == "C": self.Correct = True
-        elif self.Number == 24 and self.Answer == "D": self.Correct = True
-        elif self.Number == 25 and self.Answer == "C": self.Correct = True
-        elif self.Number == 26 and self.Answer == "D": self.Correct = True
-        elif self.Number == 27 and self.Answer == "B": self.Correct = True
-        elif self.Number == 28 and self.Answer == "D": self.Correct = True
-        elif self.Number == 29 and self.Answer == "A": self.Correct = True
-        elif self.Number == 30 and self.Answer == "C": self.Correct = True
-        elif self.Number == 31 and self.Answer == "A": self.Correct = True
-        elif self.Number == 32 and self.Answer == "D": self.Correct = True
-        elif self.Number == 33 and self.Answer == "A": self.Correct = True
-        elif self.Number == 34 and self.Answer == "C": self.Correct = True
-        elif self.Number == 35 and self.Answer == "D": self.Correct = True
-        elif self.Number == 36 and self.Answer == "C": self.Correct = True
-        elif self.Number == 37 and self.Answer == "D": self.Correct = True
-        elif self.Number == 38 and self.Answer == "B": self.Correct = True
-        elif self.Number == 39 and self.Answer == "A": self.Correct = True
-        else: self.Correct = False
-
-    def GetAnswer(self):
-        '''if game.Turn == "player2":
-            choices = ["A", "B", "C", "D"] #dit klopt nog niet 
-            dice.Roll()
-            self.SetQuestion()
-            self.setCorrect(dice.Number, random.choice(choices))'''
-        if game.Turn == "player1":
-            self.setCorrect(self.Number, self.Answer)
-        if self.Correct == True and game.Turn == "player1": 
-            player1.SetPosition() 
-            player1.score += 1
-            self.CorrectA()
-        elif self.Correct == False and game.Turn == "player1":
-            self.InCorrectA()
-            player1.score -=1
-        if self.Correct == True and game.Turn == "player2": 
+        choices = ["A", "B", "C", "D"] #dit klopt nog niet 
+        dice.Roll()
+        self.SetQuestion()
+        self.setCorrect(dice.Number, random.choice(choices))
+        if self.Correct == True: 
             player2.score += 1
             player2.SetPosition() 
             self.CorrectA()
@@ -394,6 +337,58 @@ class Question:
             player2.score -=1
         TurnOver()
         self.QuestionTime = False
+
+    def GetAnswer(self):
+            if   self.Number == 0  and self.Answer == "B": self.Correct = True
+            elif self.Number == 1  and self.Answer == "C": self.Correct = True
+            elif self.Number == 2  and self.Answer == "B": self.Correct = True
+            elif self.Number == 3  and self.Answer == "C": self.Correct = True
+            elif self.Number == 4  and self.Answer == "A": self.Correct = True
+            elif self.Number == 5  and self.Answer == "C": self.Correct = True
+            elif self.Number == 6  and self.Answer == "A": self.Correct = True
+            elif self.Number == 7  and self.Answer == "D": self.Correct = True
+            elif self.Number == 8  and self.Answer == "A": self.Correct = True
+            elif self.Number == 9  and self.Answer == "D": self.Correct = True
+            elif self.Number == 10 and self.Answer == "C": self.Correct = True
+            elif self.Number == 11 and self.Answer == "B": self.Correct = True
+            elif self.Number == 12 and self.Answer == "B": self.Correct = True
+            elif self.Number == 13 and self.Answer == "B": self.Correct = True
+            elif self.Number == 14 and self.Answer == "D": self.Correct = True
+            elif self.Number == 15 and self.Answer == "B": self.Correct = True
+            elif self.Number == 16 and self.Answer == "A": self.Correct = True
+            elif self.Number == 17 and self.Answer == "B": self.Correct = True
+            elif self.Number == 18 and self.Answer == "D": self.Correct = True
+            elif self.Number == 19 and self.Answer == "D": self.Correct = True
+            elif self.Number == 20 and self.Answer == "B": self.Correct = True
+            elif self.Number == 21 and self.Answer == "D": self.Correct = True
+            elif self.Number == 22 and self.Answer == "A": self.Correct = True
+            elif self.Number == 23 and self.Answer == "C": self.Correct = True
+            elif self.Number == 24 and self.Answer == "D": self.Correct = True
+            elif self.Number == 25 and self.Answer == "C": self.Correct = True
+            elif self.Number == 26 and self.Answer == "D": self.Correct = True
+            elif self.Number == 27 and self.Answer == "B": self.Correct = True
+            elif self.Number == 28 and self.Answer == "D": self.Correct = True
+            elif self.Number == 29 and self.Answer == "A": self.Correct = True
+            elif self.Number == 30 and self.Answer == "C": self.Correct = True
+            elif self.Number == 31 and self.Answer == "A": self.Correct = True
+            elif self.Number == 32 and self.Answer == "D": self.Correct = True
+            elif self.Number == 33 and self.Answer == "A": self.Correct = True
+            elif self.Number == 34 and self.Answer == "C": self.Correct = True
+            elif self.Number == 35 and self.Answer == "D": self.Correct = True
+            elif self.Number == 36 and self.Answer == "C": self.Correct = True
+            elif self.Number == 37 and self.Answer == "D": self.Correct = True
+            elif self.Number == 38 and self.Answer == "B": self.Correct = True
+            elif self.Number == 39 and self.Answer == "A": self.Correct = True
+            else: self.Correct = False
+            if self.Correct == True: 
+                player1.SetPosition() 
+                player1.score += 1
+                self.CorrectA()
+            elif self.Correct == False:
+                self.InCorrectA()
+                player1.score -=1
+            TurnOver()
+            self.QuestionTime = False
 
     def CorrectA(self):
         checking = True
@@ -449,6 +444,11 @@ class Player:
 
     def Draw(self): 
         game.Display. blit(self.Image, tower.Squares[self.at_number].GetPosition())
+        text(str(game.Turn), 50, (110),(50), White)
+        if game.Turn == "player1":
+            text('score: '+ str(player1.score), 50, (110),(150), White)
+        elif game.Turn == "player2":
+            text('score: '+ str(player2.score), 50, (110),(150), White)
         print ("positie ", self.player, ": ", self.at_number)
 
 
